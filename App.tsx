@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures'
+import { isEqual } from 'lodash'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { GRID_LENGTH, GESTURE_CONFIGS } from '@constants/initail'
@@ -21,7 +22,12 @@ const App: FC = () => {
   }
 
   const onMoveDone = (newValue: number[][]) => {
-    setValues(pushNewValue(newValue, onEnd))
+    setValues((prevState) => {
+      if (isEqual(prevState, newValue)) {
+        return newValue
+      }
+      return pushNewValue(newValue, onEnd)
+    })
   }
 
   const onSwipeDown = () => {
