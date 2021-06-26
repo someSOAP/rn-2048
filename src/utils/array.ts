@@ -1,3 +1,4 @@
+import { sample, cloneDeep } from 'lodash'
 import { GRID_LENGTH } from '@constants/initail'
 
 export const getColumn = (arr: number[][], n: number): number[] =>
@@ -23,4 +24,31 @@ export const move = (initialColumn: number[]): number[] => {
   }
 
   return column
+}
+
+export const pushNewValue = (
+  matrix: number[][],
+  onError: () => void
+): number[][] => {
+  const emptyCoords: [number, number][] = []
+
+  for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
+    const row = matrix[rowIndex]
+
+    for (let cellIndex = 0; cellIndex < GRID_LENGTH; cellIndex++) {
+      const cellValue = row[cellIndex]
+      if (!cellValue) {
+        emptyCoords.push([rowIndex, cellIndex])
+      }
+    }
+  }
+
+  const newMatrix = cloneDeep(matrix)
+  if (emptyCoords.length) {
+    const [x, y] = sample(emptyCoords) as [number, number]
+    newMatrix[x][y] = sample([2, 4]) as number
+  } else {
+    onError()
+  }
+  return newMatrix
 }

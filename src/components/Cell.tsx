@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 import { vw } from '@constants/window'
 
 interface ICellProps {
@@ -7,8 +7,16 @@ interface ICellProps {
 }
 
 export const Cell: FC<ICellProps> = ({ value }) => {
+  const style = Object.assign(
+    {},
+    styles.cell,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    styles[String(value)] as ViewStyle
+  )
+
   return (
-    <View style={styles.cell}>
+    <View style={style}>
       <Text style={styles.cellText}>{value}</Text>
     </View>
   )
@@ -27,6 +35,18 @@ const styles = StyleSheet.create({
   },
   cellText: {
     fontSize: 8 * vw,
+  },
+  ['2']: {
+    backgroundColor: 'white',
+  },
+  ['4']: {
+    backgroundColor: 'gray',
+  },
+  ['8']: {
+    backgroundColor: 'orange',
+  },
+  ['16']: {
+    backgroundColor: 'red',
   },
 })
 

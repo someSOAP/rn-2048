@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import { Grid } from '@components/Grid'
 import { initialValues, GRID_LENGTH } from '@constants/initail'
-import { getColumn, move } from '@utils/array'
+import { getColumn, move, pushNewValue } from '@utils/array'
 
 const App: FC = () => {
   const [values, setValues] = useState<number[][]>(initialValues)
@@ -26,7 +26,7 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(newMatrix)
+    setValues(pushNewValue(newMatrix, console.log))
   }
 
   const onSwipeUp = () => {
@@ -47,7 +47,7 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(newMatrix)
+    setValues(pushNewValue(newMatrix, console.log))
   }
 
   const onSwipeLeft = () => {
@@ -56,7 +56,7 @@ const App: FC = () => {
       newMatrix.push(move(row.reverse()).reverse())
     }
 
-    setValues(newMatrix)
+    setValues(pushNewValue(newMatrix, console.log))
   }
 
   const onSwipeRight = () => {
@@ -65,7 +65,7 @@ const App: FC = () => {
       newMatrix.push(move(row))
     }
 
-    setValues(newMatrix)
+    setValues(pushNewValue(newMatrix, console.log))
   }
 
   return (
