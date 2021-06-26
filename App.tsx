@@ -20,6 +20,10 @@ const App: FC = () => {
     setIsOver(false)
   }
 
+  const onMoveDone = (newValue: number[][]) => {
+    setValues(pushNewValue(newValue, onEnd))
+  }
+
   const onSwipeDown = () => {
     const columns: number[][] = []
     for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
@@ -36,7 +40,8 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(pushNewValue(newMatrix, onEnd))
+    setLastMove('DOWN')
+    onMoveDone(newMatrix)
   }
 
   const onSwipeUp = () => {
@@ -55,7 +60,8 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(pushNewValue(newMatrix, onEnd))
+    setLastMove('UP')
+    onMoveDone(newMatrix)
   }
 
   const onSwipeLeft = () => {
@@ -63,7 +69,8 @@ const App: FC = () => {
     for (const row of values) {
       newMatrix.push(makeMove(row))
     }
-    setValues(pushNewValue(newMatrix, onEnd))
+    setLastMove('LEFT')
+    onMoveDone(newMatrix)
   }
 
   const onSwipeRight = () => {
@@ -71,7 +78,8 @@ const App: FC = () => {
     for (const row of values) {
       newMatrix.push(makeMove(row.reverse()).reverse())
     }
-    setValues(pushNewValue(newMatrix, onEnd))
+    setLastMove('RIGHT')
+    onMoveDone(newMatrix)
   }
 
   return (

@@ -1,4 +1,4 @@
-import { sample, cloneDeep, sampleSize } from 'lodash'
+import { sample, cloneDeep, sampleSize, isEmpty } from 'lodash'
 import { GRID_LENGTH } from '@constants/initail'
 
 export const initValues = (): number[][] => {
@@ -58,7 +58,7 @@ const mergeArray = (initialArray: number[]): number[] => {
 
   let array = initialArray.filter((it) => it)
 
-  if (!array.length) {
+  if (isEmpty(array)) {
     return []
   }
 
@@ -79,4 +79,17 @@ export const makeMove = (initialArray: number[]): number[] => {
     array.push(0)
   }
   return array
+}
+
+export const matrixFormColumns = (columns: number[][]): number[][] => {
+  const newMatrix: number[][] = []
+
+  for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
+    newMatrix[rowIndex] = []
+    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
+      newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
+    }
+  }
+
+  return newMatrix
 }
