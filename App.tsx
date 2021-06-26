@@ -1,20 +1,29 @@
 import React, { FC, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures'
+import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
-import { initialValues, GRID_LENGTH } from '@constants/initail'
-import { getColumn, move, pushNewValue } from '@utils/array'
+import { GRID_LENGTH } from '@constants/initail'
+import { initValues, getColumn, move, pushNewValue } from '@utils/array'
 
 const App: FC = () => {
-  const [values, setValues] = useState<number[][]>(initialValues)
+  const [values, setValues] = useState<number[][]>(initValues())
+  const [isOver, setIsOver] = useState<boolean>(false)
+
+  const onEnd = () => {
+    setIsOver(true)
+  }
+
+  const onStartAgain = () => {
+    setValues(initValues())
+    setIsOver(false)
+  }
 
   const onSwipeDown = () => {
     const columns: number[][] = []
+
     for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
       columns[colIndex] = getColumn(values, colIndex)
-    }
-
-    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
       const column = columns[colIndex]
       columns[colIndex] = move(column)
     }
@@ -26,16 +35,13 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(pushNewValue(newMatrix, console.log))
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeUp = () => {
     const columns: number[][] = []
     for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
       columns[colIndex] = getColumn(values, colIndex)
-    }
-
-    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
       const column = columns[colIndex]
       columns[colIndex] = move(column.reverse()).reverse()
     }
@@ -47,7 +53,7 @@ const App: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setValues(pushNewValue(newMatrix, console.log))
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeLeft = () => {
@@ -56,7 +62,7 @@ const App: FC = () => {
       newMatrix.push(move(row.reverse()).reverse())
     }
 
-    setValues(pushNewValue(newMatrix, console.log))
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeRight = () => {
@@ -65,20 +71,23 @@ const App: FC = () => {
       newMatrix.push(move(row))
     }
 
-    setValues(pushNewValue(newMatrix, console.log))
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   return (
-    <View style={styles.screen}>
-      <GestureRecognizer
-        onSwipeDown={onSwipeDown}
-        onSwipeLeft={onSwipeLeft}
-        onSwipeRight={onSwipeRight}
-        onSwipeUp={onSwipeUp}
-      >
+    <GestureRecognizer
+      style={styles.screen}
+      onSwipeDown={onSwipeDown}
+      onSwipeLeft={onSwipeLeft}
+      onSwipeRight={onSwipeRight}
+      onSwipeUp={onSwipeUp}
+    >
+      {isOver ? (
+        <CustomButton onPress={onStartAgain}>Start Again</CustomButton>
+      ) : (
         <Grid values={values} />
-      </GestureRecognizer>
-    </View>
+      )}
+    </GestureRecognizer>
   )
 }
 
