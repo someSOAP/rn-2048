@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Cell } from './Cell'
 import { vw } from '@constants/window'
 
@@ -7,13 +7,12 @@ interface IGridProps {
   values: number[][]
 }
 
-const generateRow = () => {
+const generateRow = (values: number[], rowNum: number) => {
   return (
-    <View style={styles.row}>
-      <Cell value={0} />
-      <Cell value={0} />
-      <Cell value={0} />
-      <Cell value={0} />
+    <View style={styles.row} key={rowNum}>
+      {values.map((val, index) => {
+        return <Cell value={val} key={index} />
+      })}
     </View>
   )
 }
@@ -21,10 +20,9 @@ const generateRow = () => {
 export const Grid: FC<IGridProps> = ({ values }) => {
   return (
     <View style={styles.grid}>
-      {generateRow()}
-      {generateRow()}
-      {generateRow()}
-      {generateRow()}
+      {values.map((row, index) => {
+        return generateRow(row, index)
+      })}
     </View>
   )
 }

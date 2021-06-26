@@ -9,7 +9,7 @@ interface ICellProps {
 export const Cell: FC<ICellProps> = ({ value }) => {
   return (
     <View style={styles.cell}>
-      <Text>{value}</Text>
+      <Text style={styles.cellText}>{value}</Text>
     </View>
   )
 }
@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: vw,
+  },
+  cellText: {
+    fontSize: 8 * vw,
   },
 })
 
