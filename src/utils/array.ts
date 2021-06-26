@@ -24,9 +24,9 @@ export const getColumn = (arr: number[][], n: number): number[] =>
   arr.map((x) => x[n])
 
 export const move = (initialColumn: number[]): number[] => {
-  const column = [...initialColumn]
+  let column = initialColumn
 
-  for (let cellIndex = GRID_LENGTH - 2; cellIndex >= 0; cellIndex--) {
+  for (let cellIndex = GRID_LENGTH - 1; cellIndex >= 0; cellIndex--) {
     const currentValue = column[cellIndex]
 
     for (let i = cellIndex; i < GRID_LENGTH; i++) {
@@ -36,6 +36,7 @@ export const move = (initialColumn: number[]): number[] => {
         break
       }
       if (!nextValue || nextValue === currentValue) {
+        column = [...column]
         column[nextCellIndex] = currentValue + nextValue
         column[i] = 0
       }
