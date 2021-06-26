@@ -9,7 +9,7 @@ interface GestureRecognizerConfig {
 export const GRID_LENGTH = 4
 
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
-  velocityThreshold: 1,
+  velocityThreshold: 0.2,
   directionalOffsetThreshold: 100 * vh,
-  gestureIsClickThreshold: 5 * vw,
+  gestureIsClickThreshold: 2 * vw,
 }

@@ -4,7 +4,7 @@ import GestureRecognizer from 'react-native-swipe-gestures'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { GRID_LENGTH, GESTURE_CONFIGS } from '@constants/initail'
-import { initValues, getColumn, move, pushNewValue } from '@utils/array'
+import { initValues, getColumn, pushNewValue, makeMove } from '@utils/array'
 
 const App: FC = () => {
   const [values, setValues] = useState<number[][]>(initValues())
@@ -21,90 +21,57 @@ const App: FC = () => {
   }
 
   const onSwipeDown = () => {
-    let wasMove = false
     const columns: number[][] = []
     for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
       columns[colIndex] = getColumn(values, colIndex)
       const column = columns[colIndex]
-      const initialColumn = column
 
-      const movedColumn = move(initialColumn)
-      if (initialColumn !== movedColumn) {
-        columns[colIndex] = movedColumn
-        wasMove = true
-      }
+      columns[colIndex] = makeMove(column.reverse()).reverse()
     }
 
-    if (wasMove) {
-      setLastMove('DOWN')
-      const newMatrix: number[][] = []
-      for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
-        newMatrix[rowIndex] = []
-        for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-          newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
-        }
+    const newMatrix: number[][] = []
+    for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
+      newMatrix[rowIndex] = []
+      for (let colIndex = 0; colIndex < columns.length; colIndex++) {
+        newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
-      setValues(pushNewValue(newMatrix, onEnd))
     }
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeUp = () => {
-    let wasMove = false
     const columns: number[][] = []
     for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
       columns[colIndex] = getColumn(values, colIndex)
       const column = columns[colIndex]
-      const initialColumn = column.reverse()
 
-      const movedColumn = move(initialColumn)
-      if (initialColumn !== movedColumn) {
-        columns[colIndex] = movedColumn.reverse()
-        wasMove = true
-      }
+      columns[colIndex] = makeMove(column)
     }
 
-    if (wasMove) {
-      setLastMove('UP')
-      const newMatrix: number[][] = []
-      for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
-        newMatrix[rowIndex] = []
-        for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-          newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
-        }
+    const newMatrix: number[][] = []
+    for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
+      newMatrix[rowIndex] = []
+      for (let colIndex = 0; colIndex < columns.length; colIndex++) {
+        newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
-      setValues(pushNewValue(newMatrix, onEnd))
     }
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeLeft = () => {
-    let wasMove = false
     const newMatrix = []
     for (const row of values) {
-      const initialRow = row.reverse()
-      const movedRow = move(initialRow)
-      wasMove = movedRow !== initialRow
-      newMatrix.push(movedRow.reverse())
+      newMatrix.push(makeMove(row))
     }
-
-    if (wasMove) {
-      setLastMove('LEFT')
-      setValues(pushNewValue(newMatrix, onEnd))
-    }
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   const onSwipeRight = () => {
-    let wasMove = false
     const newMatrix = []
     for (const row of values) {
-      const movedRow = move(row)
-      wasMove = movedRow !== row
-      newMatrix.push(movedRow)
+      newMatrix.push(makeMove(row.reverse()).reverse())
     }
-
-    if (wasMove) {
-      setLastMove('RIGHT')
-      setValues(pushNewValue(newMatrix, onEnd))
-    }
+    setValues(pushNewValue(newMatrix, onEnd))
   }
 
   return (

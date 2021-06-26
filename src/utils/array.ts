@@ -23,29 +23,6 @@ export const initValues = (): number[][] => {
 export const getColumn = (arr: number[][], n: number): number[] =>
   arr.map((x) => x[n])
 
-export const move = (initialColumn: number[]): number[] => {
-  let column = initialColumn
-
-  for (let cellIndex = GRID_LENGTH - 1; cellIndex >= 0; cellIndex--) {
-    const currentValue = column[cellIndex]
-
-    for (let i = cellIndex; i < GRID_LENGTH; i++) {
-      const nextCellIndex = i + 1
-      const nextValue = column[nextCellIndex]
-      if (nextCellIndex === GRID_LENGTH) {
-        break
-      }
-      if (!nextValue || nextValue === currentValue) {
-        column = [...column]
-        column[nextCellIndex] = currentValue + nextValue
-        column[i] = 0
-      }
-    }
-  }
-
-  return column
-}
-
 export const pushNewValue = (
   matrix: number[][],
   onError: () => void
@@ -71,4 +48,35 @@ export const pushNewValue = (
     onError()
   }
   return newMatrix
+}
+
+const mergeArray = (initialArray: number[]): number[] => {
+  const arrLength = initialArray.length
+  if (arrLength < 2) {
+    return initialArray
+  }
+
+  let array = initialArray.filter((it) => it)
+
+  if (!array.length) {
+    return []
+  }
+
+  if (array[0] === array[1]) {
+    array[0] = array[0] + array[1]
+    array[1] = 0
+  }
+
+  array = [array[0], ...mergeArray(array.slice(1))]
+
+  return array
+}
+
+export const makeMove = (initialArray: number[]): number[] => {
+  const array = mergeArray(initialArray)
+
+  while (array.length < initialArray.length) {
+    array.push(0)
+  }
+  return array
 }
