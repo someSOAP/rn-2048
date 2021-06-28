@@ -1,3 +1,5 @@
+import { vw } from '@constants/window'
+
 interface GestureRecognizerConfig {
   velocityThreshold?: number
   directionalOffsetThreshold?: number
@@ -5,6 +7,8 @@ interface GestureRecognizerConfig {
 }
 
 export const GRID_LENGTH = 4
+
+export const CELL_DIMENSION = 20 * vw
 
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   velocityThreshold: 0.3,
