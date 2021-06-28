@@ -7,3 +7,11 @@ export interface IGame {
   isOver: boolean
   lastMove: MoveType
 }
+
+export interface ICell {
+  x: number
+  y: number
+  prevX: number
+  prevY: number
+  value: number
+}

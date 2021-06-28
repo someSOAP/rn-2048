@@ -13,7 +13,11 @@ import {
 } from '@/store'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
-import { GRID_LENGTH, GESTURE_CONFIGS } from '@constants/initail'
+import {
+  GRID_LENGTH,
+  GESTURE_CONFIGS,
+  ANIMATION_TIMING,
+} from '@constants/initail'
 import { initValues, getColumn, pushNewValue, makeMove } from '@utils/array'
 import { GridType, MoveType } from 'types'
 
@@ -43,9 +47,12 @@ const GameView: FC = () => {
     dispatch(setIsOver(false))
   }
 
-  const onMoveDone = (newValue: GridType) => {
+  const onMoveDone = (newValue: GridType, move: MoveType) => {
     if (!isEqual(values, newValue)) {
-      setValues(pushNewValue(newValue, onEnd))
+      setLastMove(move)
+      setTimeout(() => {
+        setValues(pushNewValue(newValue, onEnd))
+      }, ANIMATION_TIMING)
     }
   }
 
@@ -65,8 +72,7 @@ const GameView: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setLastMove('DOWN')
-    onMoveDone(newMatrix)
+    onMoveDone(newMatrix, 'DOWN')
   }
 
   const onSwipeUp = () => {
@@ -85,8 +91,8 @@ const GameView: FC = () => {
         newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
       }
     }
-    setLastMove('UP')
-    onMoveDone(newMatrix)
+
+    onMoveDone(newMatrix, 'UP')
   }
 
   const onSwipeLeft = () => {
@@ -94,8 +100,8 @@ const GameView: FC = () => {
     for (const row of values) {
       newMatrix.push(makeMove(row))
     }
-    setLastMove('LEFT')
-    onMoveDone(newMatrix)
+
+    onMoveDone(newMatrix, 'LEFT')
   }
 
   const onSwipeRight = () => {
@@ -105,8 +111,8 @@ const GameView: FC = () => {
 
       newMatrix.push(makeMove(reversedRow).reverse())
     }
-    setLastMove('RIGHT')
-    onMoveDone(newMatrix)
+
+    onMoveDone(newMatrix, 'RIGHT')
   }
 
   return (
