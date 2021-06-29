@@ -13,8 +13,8 @@ export const initValues = (): number[][] => {
     }
   }
 
-  sampleSize(freeCells, 3).forEach(([x, y]) => {
-    matrix[x][y] = sample([2, 4]) as number
+  sampleSize(freeCells, 3).forEach(([y, x]) => {
+    matrix[y][x] = sample([2, 4]) as number
   })
 
   return matrix
@@ -42,8 +42,8 @@ export const pushNewValue = (
 
   const newMatrix = cloneDeep(matrix)
   if (emptyCoords.length) {
-    const [x, y] = sample(emptyCoords) as [number, number]
-    newMatrix[x][y] = sample([2, 4]) as number
+    const [y, x] = sample(emptyCoords) as [number, number]
+    newMatrix[y][x] = sample([2, 4]) as number
   } else {
     onError()
   }
@@ -79,17 +79,4 @@ export const makeMove = (initialArray: number[]): number[] => {
     array.push(0)
   }
   return array
-}
-
-export const matrixFormColumns = (columns: number[][]): number[][] => {
-  const newMatrix: number[][] = []
-
-  for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
-    newMatrix[rowIndex] = []
-    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-      newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
-    }
-  }
-
-  return newMatrix
 }
