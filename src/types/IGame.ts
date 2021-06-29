@@ -1,4 +1,6 @@
-export type GridType = number[][]
+import { ICell } from './Cell'
+
+export type GridType = ICell[][]
 
 export type MoveType = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'
 
@@ -6,12 +8,4 @@ export interface IGame {
   grid: GridType
   isOver: boolean
   lastMove: MoveType
-}
-
-export interface ICell {
-  x: number
-  y: number
-  prevX: number
-  prevY: number
-  value: number
 }

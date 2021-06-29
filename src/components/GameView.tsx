@@ -2,7 +2,6 @@ import React, { FC, useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
-import { isEqual } from 'lodash'
 import {
   updateGrid,
   setIsOver,
@@ -18,8 +17,16 @@ import {
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
 } from '@constants/initail'
-import { initValues, getColumn, pushNewValue, makeMove } from '@utils/array'
-import { GridType, MoveType } from 'types'
+import {
+  initValues,
+  getColumn,
+  pushNewValue,
+  moveColDown,
+  moveColUp,
+  moveRowLeft,
+  moveRowRight,
+} from '@utils/array'
+import { GridType, MoveType } from '@/types'
 
 const GameView: FC = () => {
   const dispatch = useDispatch()
@@ -48,12 +55,10 @@ const GameView: FC = () => {
   }
 
   const onMoveDone = (newValue: GridType, move: MoveType) => {
-    if (!isEqual(values, newValue)) {
-      setLastMove(move)
-      setTimeout(() => {
-        setValues(pushNewValue(newValue, onEnd))
-      }, ANIMATION_TIMING)
-    }
+    setLastMove(move)
+    setTimeout(() => {
+      setValues(pushNewValue(newValue, onEnd))
+    }, ANIMATION_TIMING)
   }
 
   const onSwipeDown = () => {
@@ -62,10 +67,10 @@ const GameView: FC = () => {
       columns[colIndex] = getColumn(values, colIndex)
       const column = columns[colIndex]
 
-      columns[colIndex] = makeMove(column.reverse()).reverse()
+      columns[colIndex] = moveColDown(column, colIndex)
     }
 
-    const newMatrix: number[][] = []
+    const newMatrix: GridType = []
     for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
       newMatrix[rowIndex] = []
       for (let colIndex = 0; colIndex < columns.length; colIndex++) {
@@ -81,7 +86,7 @@ const GameView: FC = () => {
       columns[colIndex] = getColumn(values, colIndex)
       const column = columns[colIndex]
 
-      columns[colIndex] = makeMove(column)
+      columns[colIndex] = moveColUp(column, colIndex)
     }
 
     const newMatrix: GridType = []
@@ -97,21 +102,21 @@ const GameView: FC = () => {
 
   const onSwipeLeft = () => {
     const newMatrix = []
-    for (const row of values) {
-      newMatrix.push(makeMove(row))
-    }
 
+    for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
+      const row = values[rowIndex]
+      newMatrix.push(moveRowLeft(row, rowIndex))
+    }
     onMoveDone(newMatrix, 'LEFT')
   }
 
   const onSwipeRight = () => {
     const newMatrix = []
-    for (const row of values) {
-      const reversedRow = [...row].reverse()
 
-      newMatrix.push(makeMove(reversedRow).reverse())
+    for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
+      const row = values[rowIndex]
+      newMatrix.push(moveRowRight(row, rowIndex))
     }
-
     onMoveDone(newMatrix, 'RIGHT')
   }
 

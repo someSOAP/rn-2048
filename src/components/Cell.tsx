@@ -10,10 +10,7 @@ import {
 import { vw } from '@constants/window'
 import { CELL_DIMENSION } from '@constants/initail'
 import { COLORS_MAP } from '@constants/colors'
-
-interface ICellProps {
-  value: number
-}
+import { ICell } from '@/types'
 
 const mapColor = (value: number): ViewStyle => {
   const backgroundColor = COLORS_MAP.get(value) ?? 'green'
@@ -21,7 +18,9 @@ const mapColor = (value: number): ViewStyle => {
   return { backgroundColor }
 }
 
-const ValueCell: FC<ICellProps> = ({ value }) => {
+const ValueCell: FC<ICell> = (cell) => {
+  const { value } = cell
+
   const animVal = useRef(new Animated.Value(0)).current
 
   const startAnimate = () => {
@@ -52,10 +51,10 @@ const ValueCell: FC<ICellProps> = ({ value }) => {
   )
 }
 
-export const Cell: FC<ICellProps> = ({ value }) => {
+export const Cell: FC<ICell> = (cell) => {
   return (
     <View style={styles.backgroundCell}>
-      {value ? <ValueCell value={value} /> : null}
+      {cell.value ? <ValueCell {...cell} /> : null}
     </View>
   )
 }

@@ -1,39 +1,58 @@
 import { sample, cloneDeep, sampleSize, isEmpty } from 'lodash'
 import { GRID_LENGTH } from '@constants/initail'
+import { GridType, ICell } from '@/types'
 
-export const initValues = (): number[][] => {
-  const matrix: number[][] = []
+export const newCell = (y: number, x: number): ICell => {
+  return {
+    prevX: x,
+    prevY: y,
+    x,
+    y,
+    value: 0,
+    prevValue: 0,
+  }
+}
+
+const newRandomCell = (y: number, x: number): ICell => {
+  const cell = newCell(y, x)
+  cell.value = sample([2, 4]) as number
+  cell.prevValue = cell.value
+  return cell
+}
+
+export const initValues = (): GridType => {
+  const matrix: GridType = []
   const freeCells: [number, number][] = []
 
   for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
     matrix[rowIndex] = []
     for (let cellIndex = 0; cellIndex < GRID_LENGTH; cellIndex++) {
-      matrix[rowIndex][cellIndex] = 0
+      matrix[rowIndex][cellIndex] = newCell(rowIndex, cellIndex)
       freeCells.push([rowIndex, cellIndex])
     }
   }
 
   sampleSize(freeCells, 3).forEach(([y, x]) => {
-    matrix[y][x] = sample([2, 4]) as number
+    matrix[y][x] = newRandomCell(y, x)
   })
 
   return matrix
 }
 
-export const getColumn = (arr: number[][], n: number): number[] =>
+export const getColumn = (arr: GridType, n: number): ICell[] =>
   arr.map((x) => x[n])
 
 export const pushNewValue = (
-  matrix: number[][],
+  matrix: GridType,
   onError: () => void
-): number[][] => {
+): GridType => {
   const emptyCoords: [number, number][] = []
 
   for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
     const row = matrix[rowIndex]
 
     for (let cellIndex = 0; cellIndex < GRID_LENGTH; cellIndex++) {
-      const cellValue = row[cellIndex]
+      const cellValue = row[cellIndex].value
       if (!cellValue) {
         emptyCoords.push([rowIndex, cellIndex])
       }
@@ -43,40 +62,77 @@ export const pushNewValue = (
   const newMatrix = cloneDeep(matrix)
   if (emptyCoords.length) {
     const [y, x] = sample(emptyCoords) as [number, number]
-    newMatrix[y][x] = sample([2, 4]) as number
+
+    newMatrix[y][x] = newRandomCell(y, x)
   } else {
     onError()
   }
   return newMatrix
 }
 
-const mergeArray = (initialArray: number[]): number[] => {
-  const arrLength = initialArray.length
-  if (arrLength < 2) {
-    return initialArray
+const mergeRow = (initialRow: ICell[]): ICell[] => {
+  let array = initialRow.reduce((resultArr, item) => {
+    if (item.value) {
+      resultArr.push({ ...item })
+    }
+    return resultArr
+  }, [] as ICell[])
+
+  if (array.length < 2) {
+    return array
   }
 
-  let array = initialArray.filter((it) => it)
+  if (array[0].value === array[1].value) {
+    array[0].prevValue = array[0].value
+    array[0].value = array[0].value + array[1].value
 
-  if (isEmpty(array)) {
-    return []
+    array[1].prevValue = array[0].value
+    array[1].value = 0
   }
 
-  if (array[0] === array[1]) {
-    array[0] = array[0] + array[1]
-    array[1] = 0
-  }
-
-  array = [array[0], ...mergeArray(array.slice(1))]
+  array = [array[0], ...mergeRow(array.slice(1))]
 
   return array
 }
 
-export const makeMove = (initialArray: number[]): number[] => {
-  const array = mergeArray(initialArray)
+export const moveRowLeft = (initialRow: ICell[], index: number): ICell[] => {
+  const array = mergeRow(initialRow)
 
-  while (array.length < initialArray.length) {
-    array.push(0)
+  while (array.length < initialRow.length) {
+    array.push(newCell(index, array.length))
   }
+
   return array
+}
+
+export const moveColUp = (initialCol: ICell[], index: number): ICell[] => {
+  const array = mergeRow(initialCol)
+
+  while (array.length < initialCol.length) {
+    array.push(newCell(array.length, index))
+  }
+
+  return array
+}
+
+export const moveRowRight = (initialRow: ICell[], index: number): ICell[] => {
+  const row = [...initialRow]
+  const array = mergeRow(row.reverse())
+
+  while (array.length < initialRow.length) {
+    array.push(newCell(index, array.length - 1))
+  }
+
+  return array.reverse()
+}
+
+export const moveColDown = (initialCol: ICell[], index: number): ICell[] => {
+  const col = [...initialCol]
+  const array = mergeRow(col.reverse())
+
+  while (array.length < initialCol.length) {
+    array.push(newCell(array.length, index))
+  }
+
+  return array.reverse()
 }

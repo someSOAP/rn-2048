@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IGame, MoveType } from '@/types'
+import { GridType, IGame, MoveType } from '@/types'
 
 const initialState: IGame = {
   grid: [],
@@ -11,7 +11,7 @@ export const gameSlice = createSlice({
   name: 'gridSlice',
   initialState,
   reducers: {
-    updateGrid(state, { payload }: PayloadAction<number[][]>) {
+    updateGrid(state, { payload }: PayloadAction<GridType>) {
       state.grid = payload
     },
     setIsOver(state, { payload }: PayloadAction<boolean>) {

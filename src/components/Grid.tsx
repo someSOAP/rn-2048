@@ -2,16 +2,17 @@ import React, { FC } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Cell } from './Cell'
 import { vw } from '@constants/window'
+import { GridType, ICell } from '@/types'
 
 interface IGridProps {
-  values: number[][]
+  values: GridType
 }
 
-const generateRow = (values: number[], rowNum: number) => {
+const generateRow = (values: ICell[], rowNum: number) => {
   return (
     <View style={styles.row} key={rowNum}>
-      {values.map((val, index) => {
-        return <Cell value={val} key={index} />
+      {values.map((cell, index) => {
+        return <Cell {...cell} key={index} />
       })}
     </View>
   )
