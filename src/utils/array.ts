@@ -1,4 +1,4 @@
-import { sample, cloneDeep, sampleSize, isEmpty } from 'lodash'
+import { sample, cloneDeep, sampleSize } from 'lodash'
 import { GRID_LENGTH } from '@constants/initail'
 import { GridType, ICell } from '@/types'
 
@@ -98,8 +98,16 @@ const mergeRow = (initialRow: ICell[]): ICell[] => {
 export const moveRowLeft = (initialRow: ICell[], index: number): ICell[] => {
   const array = mergeRow(initialRow)
 
-  while (array.length < initialRow.length) {
-    array.push(newCell(index, array.length))
+  for (let i = 0; i < initialRow.length; i++) {
+    const cell = array[i]
+    if (cell) {
+      cell.prevY = cell.y
+      cell.prevX = cell.x
+      cell.x = i
+      cell.y = index
+    } else {
+      array[i] = newCell(index, i)
+    }
   }
 
   return array
@@ -108,8 +116,16 @@ export const moveRowLeft = (initialRow: ICell[], index: number): ICell[] => {
 export const moveColUp = (initialCol: ICell[], index: number): ICell[] => {
   const array = mergeRow(initialCol)
 
-  while (array.length < initialCol.length) {
-    array.push(newCell(array.length, index))
+  for (let i = 0; i < initialCol.length; i++) {
+    const cell = array[i]
+    if (cell) {
+      cell.prevY = cell.y
+      cell.prevX = cell.x
+      cell.x = i
+      cell.y = index
+    } else {
+      array[i] = newCell(i, index)
+    }
   }
 
   return array
@@ -119,8 +135,16 @@ export const moveRowRight = (initialRow: ICell[], index: number): ICell[] => {
   const row = [...initialRow]
   const array = mergeRow(row.reverse())
 
-  while (array.length < initialRow.length) {
-    array.push(newCell(index, array.length - 1))
+  for (let i = 0; i < initialRow.length; i++) {
+    const cell = array[i]
+    if (cell) {
+      cell.prevY = cell.y
+      cell.prevX = cell.x
+      cell.x = i
+      cell.y = index
+    } else {
+      array[i] = newCell(index, i)
+    }
   }
 
   return array.reverse()
@@ -130,8 +154,16 @@ export const moveColDown = (initialCol: ICell[], index: number): ICell[] => {
   const col = [...initialCol]
   const array = mergeRow(col.reverse())
 
-  while (array.length < initialCol.length) {
-    array.push(newCell(array.length, index))
+  for (let i = 0; i < initialCol.length; i++) {
+    const cell = array[i]
+    if (cell) {
+      cell.prevY = cell.y
+      cell.prevX = cell.x
+      cell.x = i
+      cell.y = index
+    } else {
+      array[i] = newCell(i, index)
+    }
   }
 
   return array.reverse()

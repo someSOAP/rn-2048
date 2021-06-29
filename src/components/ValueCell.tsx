@@ -44,15 +44,15 @@ const ValueCell: FC<ICell> = (cell) => {
   const style = Object.assign({}, styles.cell, mapColor(value), {
     transform: [
       {
-        translateX: animVertical.interpolate({
+        translateX: animHorizontal.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw],
+          outputRange: [0, CELL_DIMENSION + 2 * vw * offsetRef.current],
         }),
       },
       {
-        translateY: animHorizontal.interpolate({
+        translateY: animVertical.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw],
+          outputRange: [0, CELL_DIMENSION + 2 * vw * offsetRef.current],
         }),
       },
     ],
@@ -68,9 +68,9 @@ const ValueCell: FC<ICell> = (cell) => {
     offsetRef.current = offset
 
     if (dir === 'UP' || dir === 'DOWN') {
-      setTimeout(startVertical, 1000)
+      startVertical()
     } else {
-      setTimeout(startHorizontal, 1000)
+      startHorizontal()
     }
   })
 

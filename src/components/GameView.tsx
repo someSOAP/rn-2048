@@ -12,11 +12,7 @@ import {
 } from '@/store'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
-import {
-  GRID_LENGTH,
-  GESTURE_CONFIGS,
-  ANIMATION_TIMING,
-} from '@constants/initail'
+import { GRID_LENGTH, GESTURE_CONFIGS } from '@constants/initail'
 import {
   initValues,
   getColumn,
@@ -56,9 +52,8 @@ const GameView: FC = () => {
 
   const onMoveDone = (newValue: GridType, move: MoveType) => {
     setLastMove(move)
-    setTimeout(() => {
-      setValues(pushNewValue(newValue, onEnd))
-    }, ANIMATION_TIMING)
+    console.log(newValue)
+    setValues(pushNewValue(newValue, onEnd))
   }
 
   const onSwipeDown = () => {
