@@ -1,55 +1,9 @@
-import React, { FC, useRef } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  Animated,
-  TouchableOpacity,
-} from 'react-native'
+import React, { FC } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { vw } from '@constants/window'
 import { CELL_DIMENSION } from '@constants/initail'
-import { COLORS_MAP } from '@constants/colors'
 import { ICell } from '@/types'
-
-const mapColor = (value: number): ViewStyle => {
-  const backgroundColor = COLORS_MAP.get(value) ?? 'green'
-
-  return { backgroundColor }
-}
-
-const ValueCell: FC<ICell> = (cell) => {
-  const { value } = cell
-
-  const animVal = useRef(new Animated.Value(0)).current
-
-  const startAnimate = () => {
-    Animated.timing(animVal, {
-      toValue: 100,
-      useNativeDriver: true,
-      duration: 250,
-    }).start()
-  }
-
-  const style = Object.assign({}, styles.cell, mapColor(value), {
-    transform: [
-      {
-        translateY: animVal.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw],
-        }),
-      },
-    ],
-  })
-
-  return (
-    <TouchableOpacity onPress={startAnimate}>
-      <Animated.View style={style}>
-        <Text style={styles.cellText}>{value || ''}</Text>
-      </Animated.View>
-    </TouchableOpacity>
-  )
-}
+import ValueCell from './ValueCell'
 
 export const Cell: FC<ICell> = (cell) => {
   return (
@@ -66,16 +20,6 @@ const styles = StyleSheet.create({
     height: CELL_DIMENSION,
     margin: vw,
     backgroundColor: 'rgba(238, 228, 218, 0.35)',
-  },
-  cell: {
-    borderRadius: 8,
-    width: CELL_DIMENSION,
-    height: CELL_DIMENSION,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cellText: {
-    fontSize: 8 * vw,
   },
 })
 
