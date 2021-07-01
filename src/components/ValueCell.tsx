@@ -8,21 +8,39 @@ import { getMoveOffset, mapColor } from '@utils/cell'
 const ValueCell: FC<ICell> = (cell) => {
   const { value } = cell
 
-  const animVertical = useRef(new Animated.Value(0)).current
-  const animHorizontal = useRef(new Animated.Value(0)).current
+  const animUp = useRef(new Animated.Value(0)).current
+  const animLeft = useRef(new Animated.Value(0)).current
+  const animDown = useRef(new Animated.Value(0)).current
+  const animRight = useRef(new Animated.Value(0)).current
 
   const { offset, dir } = getMoveOffset(cell)
 
-  const startVertical = () => {
-    Animated.timing(animVertical, {
+  const startUp = () => {
+    Animated.timing(animUp, {
       toValue: 100,
       useNativeDriver: true,
       duration: 250,
     }).start()
   }
 
-  const startHorizontal = () => {
-    Animated.timing(animHorizontal, {
+  const startLeft = () => {
+    Animated.timing(animLeft, {
+      toValue: 100,
+      useNativeDriver: true,
+      duration: 250,
+    }).start()
+  }
+
+  const startDown = () => {
+    Animated.timing(animDown, {
+      toValue: 100,
+      useNativeDriver: true,
+      duration: 250,
+    }).start()
+  }
+
+  const startRight = () => {
+    Animated.timing(animRight, {
       toValue: 100,
       useNativeDriver: true,
       duration: 250,
@@ -32,15 +50,27 @@ const ValueCell: FC<ICell> = (cell) => {
   const style = Object.assign({}, styles.cell, mapColor(value), {
     transform: [
       {
-        translateX: animHorizontal.interpolate({
+        translateX: animLeft.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
+          outputRange: [CELL_DIMENSION * offset, 0],
         }),
       },
       {
-        translateY: animVertical.interpolate({
+        translateY: animDown.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
+          outputRange: [-CELL_DIMENSION * offset, 0],
+        }),
+      },
+      {
+        translateX: animRight.interpolate({
+          inputRange: [0, 100],
+          outputRange: [CELL_DIMENSION * offset, 0],
+        }),
+      },
+      {
+        translateY: animUp.interpolate({
+          inputRange: [0, 100],
+          outputRange: [CELL_DIMENSION * offset, 0],
         }),
       },
     ],
@@ -49,10 +79,17 @@ const ValueCell: FC<ICell> = (cell) => {
   useEffect(() => {
     if (!offset) return void 0
 
-    if (dir === 'UP' || dir === 'DOWN') {
-      startVertical()
-    } else {
-      startHorizontal()
+    if (dir === 'UP') {
+      startUp()
+    }
+    if (dir === 'DOWN') {
+      startDown()
+    }
+    if (dir === 'LEFT') {
+      startLeft()
+    }
+    if (dir === 'RIGHT') {
+      startRight()
     }
   })
 

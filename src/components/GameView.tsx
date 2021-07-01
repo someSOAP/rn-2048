@@ -52,7 +52,6 @@ const GameView: FC = () => {
 
   const onMoveDone = (newValue: GridType, move: MoveType) => {
     setLastMove(move)
-    console.log(newValue)
     setValues(pushNewValue(newValue, onEnd))
   }
 
