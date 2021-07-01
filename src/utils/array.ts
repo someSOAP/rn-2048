@@ -121,8 +121,8 @@ export const moveColUp = (initialCol: ICell[], index: number): ICell[] => {
     if (cell) {
       cell.prevY = cell.y
       cell.prevX = cell.x
-      cell.x = i
-      cell.y = index
+      cell.y = i
+      cell.x = index
     } else {
       array[i] = newCell(i, index)
     }
@@ -159,8 +159,8 @@ export const moveColDown = (initialCol: ICell[], index: number): ICell[] => {
     if (cell) {
       cell.prevY = cell.y
       cell.prevX = cell.x
-      cell.x = i
-      cell.y = index
+      cell.y = i
+      cell.x = index
     } else {
       array[i] = newCell(i, index)
     }

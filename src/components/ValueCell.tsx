@@ -1,29 +1,17 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { Text, StyleSheet, Animated, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, Animated } from 'react-native'
 import { vw } from '@constants/window'
 import { CELL_DIMENSION } from '@constants/initail'
 import { ICell } from '@/types'
 import { getMoveOffset, mapColor } from '@utils/cell'
 
-const moveVertical = (offset: number, animVal: Animated.Value): any => {
-  return {
-    transform: [
-      {
-        translateY: animVal.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw * offset],
-        }),
-      },
-    ],
-  }
-}
-
 const ValueCell: FC<ICell> = (cell) => {
   const { value } = cell
 
-  const offsetRef = useRef<number>(0)
   const animVertical = useRef(new Animated.Value(0)).current
   const animHorizontal = useRef(new Animated.Value(0)).current
+
+  const { offset, dir } = getMoveOffset(cell)
 
   const startVertical = () => {
     Animated.timing(animVertical, {
@@ -46,26 +34,20 @@ const ValueCell: FC<ICell> = (cell) => {
       {
         translateX: animHorizontal.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw * offsetRef.current],
+          outputRange: [0, CELL_DIMENSION * offset],
         }),
       },
       {
         translateY: animVertical.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION + 2 * vw * offsetRef.current],
+          outputRange: [0, CELL_DIMENSION * offset],
         }),
       },
     ],
   })
 
   useEffect(() => {
-    const moveOffset = getMoveOffset(cell)
-
-    if (!moveOffset) return void 0
-
-    const { dir, offset } = moveOffset
-
-    offsetRef.current = offset
+    if (!offset) return void 0
 
     if (dir === 'UP' || dir === 'DOWN') {
       startVertical()

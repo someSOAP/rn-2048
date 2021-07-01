@@ -12,6 +12,6 @@ export interface ICell {
 }
 
 export interface ICellMove {
-  dir: MoveType
+  dir: MoveType | null
   offset: number
 }

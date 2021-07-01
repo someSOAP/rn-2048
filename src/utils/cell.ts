@@ -1,4 +1,4 @@
-import { ICell, ICellMove, MoveType } from '@/types'
+import { ICell, ICellMove } from '@/types'
 import { ViewStyle } from 'react-native'
 import { COLORS_MAP } from '@constants/colors'
 
@@ -8,24 +8,17 @@ export const mapColor = (value: number): ViewStyle => {
   return { backgroundColor }
 }
 
-export const getMoveOffset = (cell: ICell): ICellMove | null => {
+export const getMoveOffset = (cell: ICell): ICellMove => {
   const { x, y, prevX, prevY } = cell
-  if (x === prevX && y === prevY) return null
-
-  let dir: MoveType
-
-  let offset
+  const moveOffset: ICellMove = { dir: null, offset: 0 }
 
   if (x === prevX) {
-    dir = y < prevY ? 'UP' : 'DOWN'
-    offset = y - prevY
+    moveOffset.dir = y < prevY ? 'UP' : 'DOWN'
+    moveOffset.offset = y - prevY
   } else {
-    dir = x < prevX ? 'LEFT' : 'RIGHT'
-    offset = x - prevX
+    moveOffset.dir = x < prevX ? 'LEFT' : 'RIGHT'
+    moveOffset.offset = x - prevX
   }
 
-  return {
-    dir,
-    offset,
-  }
+  return moveOffset
 }
