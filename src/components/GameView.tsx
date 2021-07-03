@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -32,6 +32,8 @@ import { GridType, MoveType } from '@/types'
 const GameView: FC = () => {
   const dispatch = useDispatch()
 
+  const prevState = useRef<{ state: GridType | null }>({ state: null })
+
   const values = useSelector(gameGridSelector)
   const isOver = useSelector(gameIsOverSelector)
   const lastMove = useSelector(gameLastMoveSelector)
@@ -58,6 +60,7 @@ const GameView: FC = () => {
   const onMoveDone = (newValue: GridType, move: MoveType) => {
     setLastMove(move)
     // dispatch(callAnimationAndMove(newValue))
+    prevState.current.state = values
     setValues(newValue)
     setTimeout(() => {
       setValues(pushNewValue(getActualGrid(newValue), onEnd))
@@ -143,6 +146,16 @@ const GameView: FC = () => {
           >
             <Grid values={values} />
           </GestureRecognizer>
+          <CustomButton
+            onPress={() => {
+              if (prevState.current.state) {
+                setValues(prevState.current.state)
+                prevState.current.state = null
+              }
+            }}
+          >
+            UNDO
+          </CustomButton>
         </>
       )}
     </View>
