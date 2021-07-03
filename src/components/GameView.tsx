@@ -16,6 +16,7 @@ import {
   GRID_LENGTH,
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
+  ENABLE_ANIM,
 } from '@constants/initail'
 import {
   initValues,
@@ -62,9 +63,13 @@ const GameView: FC = () => {
     // dispatch(callAnimationAndMove(newValue))
     prevState.current.state = values
     setValues(newValue)
-    setTimeout(() => {
+    if (ENABLE_ANIM) {
+      setTimeout(() => {
+        setValues(pushNewValue(getActualGrid(newValue), onEnd))
+      }, ANIMATION_TIMING)
+    } else {
       setValues(pushNewValue(getActualGrid(newValue), onEnd))
-    }, ANIMATION_TIMING)
+    }
   }
 
   const onSwipeDown = () => {

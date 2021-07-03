@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { Text, StyleSheet, Animated } from 'react-native'
 import { vw } from '@constants/window'
-import { CELL_DIMENSION } from '@constants/initail'
+import { CELL_DIMENSION, ENABLE_ANIM } from '@constants/initail'
 import { ICell } from '@/types'
 import { getMoveOffset, mapColor } from '@utils/cell'
 import { ANIMATION_TIMING } from '@constants/initail'
@@ -54,7 +54,7 @@ const ValueCell: FC<ICell> = (cell) => {
   const animateHorizontal = getAnimFunction(horizontalAnim)
 
   useEffect(() => {
-    if (!dir) return void 0
+    if (!dir || !ENABLE_ANIM) return void 0
 
     switch (dir) {
       case 'DOWN':
