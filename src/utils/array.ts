@@ -130,7 +130,9 @@ export const moveRowLeft = (initialRow: ICell[], rowIndex: number): ICell[] => {
   const array = mergeRow(initialRow)
 
   for (const cell of array) {
-    cell.y = rowIndex
+    if (cell.next) {
+      cell.next.y = rowIndex
+    }
     const { x } = cell
     copy[x] = cell
   }
@@ -161,8 +163,11 @@ export const moveRowRight = (
   const array = mergeRow(copy.reverse())
 
   for (const cell of array) {
-    cell.y = rowIndex
-    const { x } = cell
+    if (cell.next) {
+      cell.next.y = rowIndex
+      cell.next.x = copy.length - 1 - cell.next.x
+    }
+    const x = copy.length - 1 - cell.x
     copy[x] = cell
   }
 

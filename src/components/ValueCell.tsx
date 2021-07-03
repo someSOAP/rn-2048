@@ -6,12 +6,20 @@ import { ICell } from '@/types'
 import { getMoveOffset, mapColor } from '@utils/cell'
 import { ANIMATION_TIMING } from '@constants/initail'
 
+const getAnimFunction = (animValue: Animated.Value) => () => {
+  animValue.setValue(0)
+  Animated.timing(animValue, {
+    toValue: 100,
+    useNativeDriver: false,
+    duration: ANIMATION_TIMING,
+  }).start()
+}
+
 const ValueCell: FC<ICell> = (cell) => {
   const mergeAnim = useRef(new Animated.Value(0)).current
-  const leftAnim = useRef(new Animated.Value(0)).current
-  const rightAnim = useRef(new Animated.Value(0)).current
-  const upAnim = useRef(new Animated.Value(0)).current
-  const downAnim = useRef(new Animated.Value(0)).current
+
+  const horizontalAnim = useRef(new Animated.Value(0)).current
+  const verticalAnim = useRef(new Animated.Value(0)).current
 
   const { offset, dir } = getMoveOffset(cell)
 
@@ -26,92 +34,37 @@ const ValueCell: FC<ICell> = (cell) => {
         }),
       },
       {
-        translateY: upAnim.interpolate({
+        translateY: verticalAnim.interpolate({
           inputRange: [0, 100],
           outputRange: [0, CELL_DIMENSION * offset + offset * 2 * vw],
         }),
       },
       {
-        translateY: downAnim.interpolate({
+        translateX: horizontalAnim.interpolate({
           inputRange: [0, 100],
           outputRange: [0, CELL_DIMENSION * offset + offset * 2 * vw],
-        }),
-      },
-      {
-        translateX: leftAnim.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
-        }),
-      },
-      {
-        translateX: rightAnim.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
         }),
       },
     ],
   })
 
-  const animateMerge = () => {
-    mergeAnim.setValue(0)
-    Animated.timing(mergeAnim, {
-      toValue: 100,
-      useNativeDriver: false,
-      duration: ANIMATION_TIMING,
-    }).start()
-  }
+  const animateMerge = getAnimFunction(mergeAnim)
 
-  const animateRight = () => {
-    Animated.timing(rightAnim, {
-      toValue: 100,
-      useNativeDriver: false,
-      duration: ANIMATION_TIMING,
-    }).start()
-    rightAnim.setValue(0)
-  }
+  const animateVertical = getAnimFunction(verticalAnim)
 
-  const animateLeft = () => {
-    Animated.timing(leftAnim, {
-      toValue: 100,
-      useNativeDriver: false,
-      duration: ANIMATION_TIMING,
-    }).start()
-    leftAnim.setValue(0)
-  }
-
-  const animateUp = () => {
-    upAnim.setValue(0)
-    Animated.timing(upAnim, {
-      toValue: 100,
-      useNativeDriver: false,
-      duration: ANIMATION_TIMING,
-    }).start()
-  }
-
-  const animateDown = () => {
-    downAnim.setValue(0)
-    Animated.timing(downAnim, {
-      toValue: 100,
-      useNativeDriver: false,
-      duration: ANIMATION_TIMING,
-    }).start()
-  }
+  const animateHorizontal = getAnimFunction(horizontalAnim)
 
   useEffect(() => {
     if (!dir) return void 0
 
     switch (dir) {
       case 'DOWN':
-        animateDown()
+      case 'UP':
+        animateVertical()
         break
       case 'LEFT':
-        animateLeft()
-        break
       case 'RIGHT':
-        animateRight()
-        break
-      case 'UP':
-        animateUp()
+        animateHorizontal()
         break
     }
   }, [offset, dir])
