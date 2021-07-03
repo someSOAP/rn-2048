@@ -4,19 +4,17 @@ import { GridType, ICell } from '@/types'
 
 export const newCell = (y: number, x: number): ICell => {
   return {
-    prevX: x,
-    prevY: y,
+    merged: true,
     x,
     y,
     value: 0,
-    prevValue: 0,
   }
 }
 
 const newRandomCell = (y: number, x: number): ICell => {
   const cell = newCell(y, x)
   cell.value = sample([2, 4]) as number
-  cell.prevValue = cell.value
+  cell.merged = true
   return cell
 }
 
@@ -70,101 +68,116 @@ export const pushNewValue = (
   return newMatrix
 }
 
-const mergeRow = (initialRow: ICell[]): ICell[] => {
-  let array = initialRow.reduce((resultArr, item) => {
+const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
+  const array = initialRow.reduce((resultArr, item) => {
     if (item.value) {
       resultArr.push({ ...item })
     }
     return resultArr
   }, [] as ICell[])
 
-  if (array.length < 2) {
+  if (array.length === 0) {
     return array
   }
 
-  if (array[0].value === array[1].value) {
-    array[0].prevValue = array[0].value
-    array[0].value = array[0].value + array[1].value
-
-    array[1].prevValue = array[0].value
-    array[1].value = 0
+  if (array.length === 1) {
+    array[0].next = {
+      merged: false,
+      value: array[0].value,
+      x: iteration,
+      y: iteration,
+    }
+    return [array[0]]
   }
 
-  array = [array[0], ...mergeRow(array.slice(1))]
+  if (array[0].value === array[1].value) {
+    array[0].next = {
+      merged: true,
+      value: array[0].value + array[1].value,
+      x: iteration,
+      y: iteration,
+    }
 
-  return array
+    array[1].next = {
+      merged: true,
+      value: 0,
+      x: iteration,
+      y: iteration,
+    }
+
+    return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
+  }
+
+  array[0].next = {
+    merged: false,
+    value: array[0].value,
+    x: iteration,
+    y: iteration,
+  }
+
+  array[1].next = {
+    merged: false,
+    value: array[1].value,
+    x: iteration + 1,
+    y: iteration + 1,
+  }
+
+  return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
 }
 
-export const moveRowLeft = (initialRow: ICell[], index: number): ICell[] => {
+export const moveRowLeft = (initialRow: ICell[], rowIndex: number): ICell[] => {
+  const copy = [...initialRow]
   const array = mergeRow(initialRow)
 
-  for (let i = 0; i < initialRow.length; i++) {
-    const cell = array[i]
-    if (cell) {
-      cell.prevY = cell.y
-      cell.prevX = cell.x
-      cell.x = i
-      cell.y = index
-    } else {
-      array[i] = newCell(index, i)
-    }
+  for (const cell of array) {
+    cell.y = rowIndex
+    const { x } = cell
+    copy[x] = cell
   }
 
-  return array
+  return copy
 }
 
-export const moveColUp = (initialCol: ICell[], index: number): ICell[] => {
+export const moveColUp = (initialCol: ICell[], colIndex: number): ICell[] => {
+  const copy = [...initialCol]
   const array = mergeRow(initialCol)
 
-  for (let i = 0; i < initialCol.length; i++) {
-    const cell = array[i]
-    if (cell) {
-      cell.prevY = cell.y
-      cell.prevX = cell.x
-      cell.y = i
-      cell.x = index
-    } else {
-      array[i] = newCell(i, index)
+  for (const cell of array) {
+    if (cell.next) {
+      cell.next.x = colIndex
     }
+    const { y } = cell
+    copy[y] = cell
   }
 
-  return array
+  return copy
 }
 
-export const moveRowRight = (initialRow: ICell[], index: number): ICell[] => {
-  const row = [...initialRow]
-  const array = mergeRow(row.reverse())
+export const moveRowRight = (
+  initialRow: ICell[],
+  rowIndex: number
+): ICell[] => {
+  const copy = [...initialRow]
+  const array = mergeRow(copy.reverse())
 
-  for (let i = 0; i < initialRow.length; i++) {
-    const cell = array[i]
-    if (cell) {
-      cell.prevY = cell.y
-      cell.prevX = cell.x
-      cell.x = i
-      cell.y = index
-    } else {
-      array[i] = newCell(index, i)
-    }
+  for (const cell of array) {
+    cell.y = rowIndex
+    const { x } = cell
+    copy[x] = cell
   }
 
-  return array.reverse()
+  return copy.reverse()
 }
 
-export const moveColDown = (initialCol: ICell[], index: number): ICell[] => {
-  const col = [...initialCol]
-  const array = mergeRow(col.reverse())
+export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
+  const copy = [...initialCol]
+  const array = mergeRow(copy.reverse())
 
-  for (let i = 0; i < initialCol.length; i++) {
-    const cell = array[i]
-    if (cell) {
-      cell.prevY = cell.y
-      cell.prevX = cell.x
-      cell.y = i
-      cell.x = index
-    } else {
-      array[i] = newCell(i, index)
-    }
+  for (const cell of array) {
+    cell.x = colIndex
+    const { y } = cell
+    copy[y] = cell
   }
 
-  return array.reverse()
+  return copy.reverse()
 }

@@ -2,13 +2,12 @@ import { MoveType } from '@/types/IGame'
 
 export interface ICell {
   value: number
-  prevValue: number
+  merged: boolean
 
   x: number
   y: number
 
-  prevX: number
-  prevY: number
+  next?: ICell
 }
 
 export interface ICellMove {

@@ -9,15 +9,19 @@ export const mapColor = (value: number): ViewStyle => {
 }
 
 export const getMoveOffset = (cell: ICell): ICellMove => {
-  const { x, y, prevX, prevY } = cell
+  const { x, y, next } = cell
   const moveOffset: ICellMove = { dir: null, offset: 0 }
 
-  if (x === prevX) {
-    moveOffset.dir = y < prevY ? 'UP' : 'DOWN'
-    moveOffset.offset = y - prevY
+  if (!next) {
+    return moveOffset
+  }
+
+  if (x === next.x) {
+    moveOffset.dir = next.y < y ? 'UP' : 'DOWN'
+    moveOffset.offset = next.y - y
   } else {
-    moveOffset.dir = x < prevX ? 'LEFT' : 'RIGHT'
-    moveOffset.offset = x - prevX
+    moveOffset.dir = next.x < x ? 'LEFT' : 'RIGHT'
+    moveOffset.offset = next.x - x
   }
 
   return moveOffset

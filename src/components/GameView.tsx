@@ -52,7 +52,10 @@ const GameView: FC = () => {
 
   const onMoveDone = (newValue: GridType, move: MoveType) => {
     setLastMove(move)
-    setValues(pushNewValue(newValue, onEnd))
+    // setValues(pushNewValue(newValue, onEnd))
+    console.log(values)
+    console.log(newValue)
+    setValues(newValue)
   }
 
   const onSwipeDown = () => {
@@ -120,6 +123,10 @@ const GameView: FC = () => {
         <CustomButton onPress={onStartAgain}>Start Again</CustomButton>
       ) : (
         <>
+          <CustomButton onPress={onSwipeUp}>UP</CustomButton>
+          <CustomButton onPress={onSwipeDown}>DOWN</CustomButton>
+          <CustomButton onPress={onSwipeLeft}>LEFT</CustomButton>
+          <CustomButton onPress={onSwipeRight}>RIGHT</CustomButton>
           <Text>LastMove is {lastMove}</Text>
           <GestureRecognizer
             onSwipeDown={onSwipeDown}
