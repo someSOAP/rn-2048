@@ -28,13 +28,13 @@ const ValueCell: FC<ICell> = (cell) => {
       {
         translateY: upAnim.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
+          outputRange: [0, CELL_DIMENSION * offset + offset * 2 * vw],
         }),
       },
       {
         translateY: downAnim.interpolate({
           inputRange: [0, 100],
-          outputRange: [0, CELL_DIMENSION * offset],
+          outputRange: [0, CELL_DIMENSION * offset + offset * 2 * vw],
         }),
       },
       {
@@ -89,12 +89,12 @@ const ValueCell: FC<ICell> = (cell) => {
   }
 
   const animateDown = () => {
+    downAnim.setValue(0)
     Animated.timing(downAnim, {
       toValue: 100,
       useNativeDriver: false,
       duration: ANIMATION_TIMING,
     }).start()
-    downAnim.setValue(0)
   }
 
   useEffect(() => {

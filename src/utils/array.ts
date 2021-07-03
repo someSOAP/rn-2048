@@ -174,8 +174,11 @@ export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
   const array = mergeRow(copy.reverse())
 
   for (const cell of array) {
-    cell.x = colIndex
-    const { y } = cell
+    if (cell.next) {
+      cell.next.x = colIndex
+      cell.next.y = copy.length - 1 - cell.next.y
+    }
+    const y = copy.length - 1 - cell.y
     copy[y] = cell
   }
 
