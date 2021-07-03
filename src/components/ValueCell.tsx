@@ -7,12 +7,11 @@ import { getMoveOffset, mapColor } from '@utils/cell'
 import { ANIMATION_TIMING } from '@constants/initail'
 
 const getAnimFunction = (animValue: Animated.Value) => () => {
-  animValue.setValue(0)
   Animated.timing(animValue, {
     toValue: 100,
     useNativeDriver: false,
     duration: ANIMATION_TIMING,
-  }).start()
+  }).start(() => animValue.setValue(0))
 }
 
 const ValueCell: FC<ICell> = (cell) => {

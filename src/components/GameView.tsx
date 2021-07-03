@@ -12,7 +12,11 @@ import {
 } from '@/store'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
-import { GRID_LENGTH, GESTURE_CONFIGS } from '@constants/initail'
+import {
+  GRID_LENGTH,
+  GESTURE_CONFIGS,
+  ANIMATION_TIMING,
+} from '@constants/initail'
 import {
   initValues,
   getColumn,
@@ -21,6 +25,7 @@ import {
   moveColUp,
   moveRowLeft,
   moveRowRight,
+  getActualGrid,
 } from '@utils/array'
 import { GridType, MoveType } from '@/types'
 
@@ -34,7 +39,7 @@ const GameView: FC = () => {
   const setValues = (values: GridType) => dispatch(updateGrid(values))
 
   useEffect(() => {
-    dispatch(setValues(initValues()))
+    setValues(initValues())
   }, [])
 
   const setLastMove = (move: MoveType) => {
@@ -52,10 +57,11 @@ const GameView: FC = () => {
 
   const onMoveDone = (newValue: GridType, move: MoveType) => {
     setLastMove(move)
-    // setValues(pushNewValue(newValue, onEnd))
-    console.log(values)
-    console.log(newValue)
+    // dispatch(callAnimationAndMove(newValue))
     setValues(newValue)
+    setTimeout(() => {
+      setValues(pushNewValue(getActualGrid(newValue), onEnd))
+    }, ANIMATION_TIMING)
   }
 
   const onSwipeDown = () => {

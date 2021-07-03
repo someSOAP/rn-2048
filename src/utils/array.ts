@@ -189,3 +189,19 @@ export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
 
   return copy.reverse()
 }
+
+export const getActualGrid = (grid: GridType): GridType => {
+  const newGrid = cloneDeep(grid)
+  for (const row of newGrid) {
+    for (const cell of row) {
+      if (cell.next && cell.next.value !== 0) {
+        const { x, y } = cell
+        const { x: nextX, y: nextY } = cell.next
+        newGrid[y][x] = newCell(y, x)
+        newGrid[nextY][nextX] = cell.next
+      }
+    }
+  }
+
+  return newGrid
+}
