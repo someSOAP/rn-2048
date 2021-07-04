@@ -191,13 +191,22 @@ export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
 }
 
 export const getActualGrid = (grid: GridType): GridType => {
-  const newGrid = cloneDeep(grid)
-  for (const row of newGrid) {
-    for (const cell of row) {
+  const newGrid: GridType = []
+
+  for (let rowIndex = 0; rowIndex < grid.length; rowIndex++) {
+    const initialGridRow = grid[rowIndex]
+    const row = [...initialGridRow]
+    newGrid[rowIndex] = row.map((_, index) => newCell(rowIndex, index))
+
+    for (let colIndex = 0; colIndex < row.length; colIndex++) {
+      // newGrid[rowIndex][colIndex] = newCell(rowIndex, colIndex)
+      const cell = initialGridRow[colIndex]
+
       if (cell.next) {
         const { x, y } = cell
+
         const { x: nextX, y: nextY } = cell.next
-        newGrid[y][x] = newCell(y, x)
+
         if (cell.next.value !== 0) {
           newGrid[nextY][nextX] = cell.next
         }
