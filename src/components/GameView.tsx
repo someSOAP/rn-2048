@@ -1,12 +1,15 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { StyleSheet, View, Text } from 'react-native'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import {
   updateGrid,
   setIsOver,
   gameGridSelector,
   gameIsOverSelector,
+  gameScoreSelector,
+  gameBestScoreSelector,
+  updateScore,
 } from '@/store'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
@@ -38,6 +41,8 @@ const GameView: FC = () => {
 
   const values = useSelector(gameGridSelector)
   const isOver = useSelector(gameIsOverSelector)
+  const score = useSelector(gameScoreSelector)
+  const bestScore = useSelector(gameBestScoreSelector)
 
   const setValues = (values: GridType) => dispatch(updateGrid(values))
 
@@ -54,9 +59,12 @@ const GameView: FC = () => {
     dispatch(setIsOver(false))
   }
 
-  const onMoveDone = (newValue: GridType) => {
+  const onMoveDone = (newValue: GridType, plusScore: number) => {
     prevState.current.state = values
-    setValues(newValue)
+    batch(() => {
+      setValues(newValue)
+      dispatch(updateScore(score + plusScore))
+    })
 
     const afterAnimValue = pushNewValue(getActualGrid(newValue))
 
@@ -81,13 +89,18 @@ const GameView: FC = () => {
       return void 0
     }
 
+    let plusScore = 0
+    const scoreCounter = (score: number) => {
+      plusScore += score
+    }
+
     columns = columns.map((column, colIndex) => {
-      return moveColDown(column, colIndex)
+      return moveColDown(column, colIndex, scoreCounter)
     })
 
     const newMatrix = detranspose(columns)
 
-    onMoveDone(newMatrix)
+    onMoveDone(newMatrix, plusScore)
   }
 
   const onSwipeUp = () => {
@@ -97,12 +110,17 @@ const GameView: FC = () => {
       return void 0
     }
 
+    let plusScore = 0
+    const scoreCounter = (score: number) => {
+      plusScore += score
+    }
+
     columns = columns.map((column, colIndex) => {
-      return moveColUp(column, colIndex)
+      return moveColUp(column, colIndex, scoreCounter)
     })
 
     const newMatrix = detranspose(columns)
-    onMoveDone(newMatrix)
+    onMoveDone(newMatrix, plusScore)
   }
 
   const onSwipeLeft = () => {
@@ -112,11 +130,16 @@ const GameView: FC = () => {
 
     const newMatrix = []
 
+    let plusScore = 0
+    const scoreCounter = (score: number) => {
+      plusScore += score
+    }
+
     for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
       const row = values[rowIndex]
-      newMatrix.push(moveRowLeft(row, rowIndex))
+      newMatrix.push(moveRowLeft(row, rowIndex, scoreCounter))
     }
-    onMoveDone(newMatrix)
+    onMoveDone(newMatrix, plusScore)
   }
 
   const onSwipeRight = () => {
@@ -126,11 +149,16 @@ const GameView: FC = () => {
 
     const newMatrix = []
 
+    let plusScore = 0
+    const scoreCounter = (score: number) => {
+      plusScore += score
+    }
+
     for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
       const row = values[rowIndex]
-      newMatrix.push(moveRowRight(row, rowIndex))
+      newMatrix.push(moveRowRight(row, rowIndex, scoreCounter))
     }
-    onMoveDone(newMatrix)
+    onMoveDone(newMatrix, plusScore)
   }
 
   return (
@@ -152,16 +180,8 @@ const GameView: FC = () => {
           >
             <Grid values={values} />
           </GestureRecognizer>
-          <CustomButton
-            onPress={() => {
-              if (prevState.current.state) {
-                setValues(prevState.current.state)
-                prevState.current.state = null
-              }
-            }}
-          >
-            UNDO
-          </CustomButton>
+          <Text>SCORE: {score}</Text>
+          <Text>BEST SCORE: {bestScore}</Text>
         </>
       )}
     </View>

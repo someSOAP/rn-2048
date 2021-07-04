@@ -27,6 +27,6 @@ export const gameSlice = createSlice({
   },
 })
 
-export const { updateGrid, setIsOver } = gameSlice.actions
+export const { updateGrid, setIsOver, updateScore } = gameSlice.actions
 
 export default gameSlice.reducer

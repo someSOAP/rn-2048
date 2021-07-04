@@ -17,3 +17,13 @@ export const gameIsOverSelector = createSelector(
   gameSelector,
   (game) => game.isOver
 )
+
+export const gameScoreSelector = createSelector(
+  gameSelector,
+  (game) => game.score
+)
+
+export const gameBestScoreSelector = createSelector(
+  gameSelector,
+  (game) => game.bestScore
+)

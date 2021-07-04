@@ -1,6 +1,6 @@
 import { sample, cloneDeep, sampleSize } from 'lodash'
 import { GRID_LENGTH } from '@constants/initail'
-import { GridType, ICell } from '@/types'
+import { GridType, ICell, IMergeResult, ScoreCounterType } from '@/types'
 
 export const newCell = (y: number, x: number): ICell => {
   return {
@@ -83,7 +83,10 @@ export const pushNewValue = (matrix: GridType): GridType => {
   return newMatrix
 }
 
-export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
+export const mergeRow = (
+  { score, array: initialRow }: IMergeResult,
+  iteration = 0
+): IMergeResult => {
   const array = initialRow.reduce((resultArr, item) => {
     if (item.value) {
       resultArr.push({ ...item })
@@ -92,7 +95,10 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
   }, [] as ICell[])
 
   if (array.length === 0) {
-    return array
+    return {
+      score,
+      array,
+    }
   }
 
   if (array.length === 1) {
@@ -102,7 +108,10 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
       x: iteration,
       y: iteration,
     }
-    return [array[0]]
+    return {
+      score,
+      array: [array[0]],
+    }
   }
 
   if (array[0].value === array[1].value) {
@@ -113,6 +122,8 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
       y: iteration,
     }
 
+    score += array[0].value
+
     array[1].next = {
       merged: true,
       value: 0,
@@ -120,7 +131,15 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
       y: iteration,
     }
 
-    return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
+    const mergeResult = mergeRow(
+      { score, array: array.slice(2) },
+      iteration + 1
+    )
+
+    return {
+      score: mergeResult.score,
+      array: [array[0], array[1], ...mergeResult.array],
+    }
   }
 
   array[0].next = {
@@ -137,12 +156,19 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
     y: iteration + 1,
   }
 
-  return [array[0], ...mergeRow(array.slice(1), iteration + 1)]
+  const mergeResult = mergeRow({ score, array: array.slice(1) }, iteration + 1)
+
+  return { score: mergeResult.score, array: [array[0], ...mergeResult.array] }
 }
 
-export const moveRowLeft = (initialRow: ICell[], rowIndex: number): ICell[] => {
+export const moveRowLeft = (
+  initialRow: ICell[],
+  rowIndex: number,
+  counter: ScoreCounterType
+): ICell[] => {
   const copy = [...initialRow]
-  const array = mergeRow(initialRow)
+  const { array, score } = mergeRow({ score: 0, array: initialRow })
+  counter(score)
 
   for (const cell of array) {
     if (cell.next) {
@@ -155,9 +181,14 @@ export const moveRowLeft = (initialRow: ICell[], rowIndex: number): ICell[] => {
   return copy
 }
 
-export const moveColUp = (initialCol: ICell[], colIndex: number): ICell[] => {
+export const moveColUp = (
+  initialCol: ICell[],
+  colIndex: number,
+  counter: ScoreCounterType
+): ICell[] => {
   const copy = [...initialCol]
-  const array = mergeRow(initialCol)
+  const { array, score } = mergeRow({ score: 0, array: initialCol })
+  counter(score)
 
   for (const cell of array) {
     if (cell.next) {
@@ -172,10 +203,12 @@ export const moveColUp = (initialCol: ICell[], colIndex: number): ICell[] => {
 
 export const moveRowRight = (
   initialRow: ICell[],
-  rowIndex: number
+  rowIndex: number,
+  counter: ScoreCounterType
 ): ICell[] => {
   const copy = [...initialRow]
-  const array = mergeRow(copy.reverse())
+  const { array, score } = mergeRow({ score: 0, array: copy.reverse() })
+  counter(score)
 
   for (const cell of array) {
     if (cell.next) {
@@ -189,9 +222,14 @@ export const moveRowRight = (
   return copy.reverse()
 }
 
-export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
+export const moveColDown = (
+  initialCol: ICell[],
+  colIndex: number,
+  counter: ScoreCounterType
+): ICell[] => {
   const copy = [...initialCol]
-  const array = mergeRow(copy.reverse())
+  const { array, score } = mergeRow({ score: 0, array: copy.reverse() })
+  counter(score)
 
   for (const cell of array) {
     if (cell.next) {

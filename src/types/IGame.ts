@@ -4,6 +4,13 @@ export type GridType = ICell[][]
 
 export type MoveType = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'
 
+export interface IMergeResult {
+  score: number
+  array: ICell[]
+}
+
+export type ScoreCounterType = (score: number) => void
+
 export interface IGame {
   grid: GridType
   isOver: boolean
