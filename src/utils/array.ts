@@ -18,6 +18,14 @@ const newRandomCell = (y: number, x: number): ICell => {
   return cell
 }
 
+export const transposeGrid = (initialGrid: GridType): GridType => {
+  const columns: GridType = []
+  for (let colIndex = 0; colIndex < GRID_LENGTH; colIndex++) {
+    columns[colIndex] = getColumn(initialGrid, colIndex)
+  }
+  return columns
+}
+
 export const initValues = (): GridType => {
   const matrix: GridType = []
   const freeCells: [number, number][] = []
