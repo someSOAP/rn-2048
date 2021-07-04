@@ -12,7 +12,7 @@ export const CELL_DIMENSION = 20 * vw
 
 export const ANIMATION_TIMING = 250 //ms
 
-export const ENABLE_ANIM = false
+export const ENABLE_ANIM = true
 
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   velocityThreshold: 0.3,

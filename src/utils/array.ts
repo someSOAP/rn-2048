@@ -68,7 +68,7 @@ export const pushNewValue = (
   return newMatrix
 }
 
-const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
+export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
   const array = initialRow.reduce((resultArr, item) => {
     if (item.value) {
       resultArr.push({ ...item })
@@ -105,7 +105,7 @@ const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
       y: iteration,
     }
 
-    return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
+    return [array[0], array[1], ...mergeRow(array.slice(1), iteration + 1)]
   }
 
   array[0].next = {
@@ -122,7 +122,7 @@ const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
     y: iteration + 1,
   }
 
-  return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
+  return [array[0], ...mergeRow(array.slice(1), iteration + 1)]
 }
 
 export const moveRowLeft = (initialRow: ICell[], rowIndex: number): ICell[] => {
