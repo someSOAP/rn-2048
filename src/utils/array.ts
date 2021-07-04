@@ -193,10 +193,13 @@ export const moveColDown = (initialCol: ICell[], colIndex: number): ICell[] => {
 export const getActualGrid = (grid: GridType): GridType => {
   const newGrid: GridType = []
 
+  grid.forEach((row, rowIndex) => {
+    newGrid.push(row.map((_, index) => newCell(rowIndex, index)))
+  })
+
   for (let rowIndex = 0; rowIndex < grid.length; rowIndex++) {
     const initialGridRow = grid[rowIndex]
     const row = [...initialGridRow]
-    newGrid[rowIndex] = row.map((_, index) => newCell(rowIndex, index))
 
     for (let colIndex = 0; colIndex < row.length; colIndex++) {
       // newGrid[rowIndex][colIndex] = newCell(rowIndex, colIndex)
