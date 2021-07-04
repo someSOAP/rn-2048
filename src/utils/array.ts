@@ -206,8 +206,6 @@ export const getActualGrid = (grid: GridType): GridType => {
       const cell = initialGridRow[colIndex]
 
       if (cell.next) {
-        const { x, y } = cell
-
         const { x: nextX, y: nextY } = cell.next
 
         if (cell.next.value !== 0) {
@@ -218,4 +216,21 @@ export const getActualGrid = (grid: GridType): GridType => {
   }
 
   return newGrid
+}
+
+export const canMoveLeft = (row: ICell[]): boolean => {
+  if (row.length < 2) {
+    return false
+  }
+  const [firstItem, nextItem] = row
+
+  if (!firstItem.value && !nextItem.value) {
+    return canMoveLeft(row.slice(1))
+  }
+
+  return (
+    !firstItem.value ||
+    firstItem.value === nextItem.value ||
+    canMoveLeft(row.slice(1))
+  )
 }
