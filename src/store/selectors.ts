@@ -17,8 +17,3 @@ export const gameIsOverSelector = createSelector(
   gameSelector,
   (game) => game.isOver
 )
-
-export const gameLastMoveSelector = createSelector(
-  gameSelector,
-  (game) => game.lastMove
-)

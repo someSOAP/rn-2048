@@ -4,7 +4,8 @@ import { GridType, IGame, MoveType } from '@/types'
 const initialState: IGame = {
   grid: [],
   isOver: true,
-  lastMove: 'DOWN',
+  score: 0,
+  bestScore: 0,
 }
 
 export const gameSlice = createSlice({
@@ -17,12 +18,15 @@ export const gameSlice = createSlice({
     setIsOver(state, { payload }: PayloadAction<boolean>) {
       state.isOver = payload
     },
-    updateLastMove(state, { payload }: PayloadAction<MoveType>) {
-      state.lastMove = payload
+    updateScore(state, { payload }: PayloadAction<number>) {
+      state.score = payload
+      if (payload > state.bestScore) {
+        state.bestScore = payload
+      }
     },
   },
 })
 
-export const { updateGrid, setIsOver, updateLastMove } = gameSlice.actions
+export const { updateGrid, setIsOver } = gameSlice.actions
 
 export default gameSlice.reducer

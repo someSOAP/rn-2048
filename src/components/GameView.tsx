@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import {
@@ -7,20 +7,16 @@ import {
   setIsOver,
   gameGridSelector,
   gameIsOverSelector,
-  gameLastMoveSelector,
-  updateLastMove,
 } from '@/store'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import {
-  GRID_LENGTH,
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
   ENABLE_ANIM,
 } from '@constants/initail'
 import {
   initValues,
-  getColumn,
   pushNewValue,
   moveColDown,
   moveColUp,
@@ -31,8 +27,9 @@ import {
   canMoveReverse,
   transposeGrid,
   checkGameEnd,
+  detranspose,
 } from '@utils/array'
-import { GridType, MoveType } from '@/types'
+import { GridType } from '@/types'
 
 const GameView: FC = () => {
   const dispatch = useDispatch()
@@ -41,17 +38,12 @@ const GameView: FC = () => {
 
   const values = useSelector(gameGridSelector)
   const isOver = useSelector(gameIsOverSelector)
-  const lastMove = useSelector(gameLastMoveSelector)
 
   const setValues = (values: GridType) => dispatch(updateGrid(values))
 
   useEffect(() => {
     setValues(initValues())
   }, [])
-
-  const setLastMove = (move: MoveType) => {
-    dispatch(updateLastMove(move))
-  }
 
   const onEnd = () => {
     dispatch(setIsOver(true))
@@ -62,9 +54,7 @@ const GameView: FC = () => {
     dispatch(setIsOver(false))
   }
 
-  const onMoveDone = (newValue: GridType, move: MoveType) => {
-    setLastMove(move)
-    // dispatch(callAnimationAndMove(newValue))
+  const onMoveDone = (newValue: GridType) => {
     prevState.current.state = values
     setValues(newValue)
 
@@ -95,14 +85,9 @@ const GameView: FC = () => {
       return moveColDown(column, colIndex)
     })
 
-    const newMatrix: GridType = []
-    for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
-      newMatrix[rowIndex] = []
-      for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-        newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
-      }
-    }
-    onMoveDone(newMatrix, 'DOWN')
+    const newMatrix = detranspose(columns)
+
+    onMoveDone(newMatrix)
   }
 
   const onSwipeUp = () => {
@@ -116,15 +101,8 @@ const GameView: FC = () => {
       return moveColUp(column, colIndex)
     })
 
-    const newMatrix: GridType = []
-    for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
-      newMatrix[rowIndex] = []
-      for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-        newMatrix[rowIndex][colIndex] = columns[colIndex][rowIndex]
-      }
-    }
-
-    onMoveDone(newMatrix, 'UP')
+    const newMatrix = detranspose(columns)
+    onMoveDone(newMatrix)
   }
 
   const onSwipeLeft = () => {
@@ -138,7 +116,7 @@ const GameView: FC = () => {
       const row = values[rowIndex]
       newMatrix.push(moveRowLeft(row, rowIndex))
     }
-    onMoveDone(newMatrix, 'LEFT')
+    onMoveDone(newMatrix)
   }
 
   const onSwipeRight = () => {
@@ -152,7 +130,7 @@ const GameView: FC = () => {
       const row = values[rowIndex]
       newMatrix.push(moveRowRight(row, rowIndex))
     }
-    onMoveDone(newMatrix, 'RIGHT')
+    onMoveDone(newMatrix)
   }
 
   return (
@@ -165,7 +143,6 @@ const GameView: FC = () => {
           <CustomButton onPress={onSwipeDown}>DOWN</CustomButton>
           <CustomButton onPress={onSwipeLeft}>LEFT</CustomButton>
           <CustomButton onPress={onSwipeRight}>RIGHT</CustomButton>
-          <Text>LastMove is {lastMove}</Text>
           <GestureRecognizer
             onSwipeDown={onSwipeDown}
             onSwipeLeft={onSwipeLeft}

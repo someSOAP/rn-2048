@@ -26,6 +26,17 @@ export const transposeGrid = (initialGrid: GridType): GridType => {
   return columns
 }
 
+export const detranspose = (grid: GridType): GridType => {
+  const newMatrix: GridType = []
+  for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
+    newMatrix[rowIndex] = []
+    for (let colIndex = 0; colIndex < grid.length; colIndex++) {
+      newMatrix[rowIndex][colIndex] = grid[colIndex][rowIndex]
+    }
+  }
+  return newMatrix
+}
+
 export const initValues = (): GridType => {
   const matrix: GridType = []
   const freeCells: [number, number][] = []
