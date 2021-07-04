@@ -48,10 +48,7 @@ export const initValues = (): GridType => {
 export const getColumn = (arr: GridType, n: number): ICell[] =>
   arr.map((x) => x[n])
 
-export const pushNewValue = (
-  matrix: GridType,
-  onError: () => void
-): GridType => {
+export const pushNewValue = (matrix: GridType): GridType => {
   const emptyCoords: [number, number][] = []
 
   for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
@@ -70,9 +67,8 @@ export const pushNewValue = (
     const [y, x] = sample(emptyCoords) as [number, number]
 
     newMatrix[y][x] = newRandomCell(y, x)
-  } else {
-    onError()
   }
+
   return newMatrix
 }
 
@@ -262,4 +258,15 @@ export const canMoveReverse = (grid: GridType): boolean => {
   }, false)
 
   return result
+}
+
+export const checkGameEnd = (grid: GridType): boolean => {
+  const transposedGrid = transposeGrid(grid)
+
+  return !(
+    canMoveStraight(grid) ||
+    canMoveReverse(grid) ||
+    canMoveStraight(transposedGrid) ||
+    canMoveReverse(transposedGrid)
+  )
 }

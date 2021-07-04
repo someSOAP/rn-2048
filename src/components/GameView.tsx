@@ -30,6 +30,7 @@ import {
   canMoveStraight,
   canMoveReverse,
   transposeGrid,
+  checkGameEnd,
 } from '@utils/array'
 import { GridType, MoveType } from '@/types'
 
@@ -66,12 +67,20 @@ const GameView: FC = () => {
     // dispatch(callAnimationAndMove(newValue))
     prevState.current.state = values
     setValues(newValue)
+
+    const afterAnimValue = pushNewValue(getActualGrid(newValue))
+
+    if (checkGameEnd(afterAnimValue)) {
+      onEnd()
+      return void 0
+    }
+
     if (ENABLE_ANIM) {
       setTimeout(() => {
-        setValues(pushNewValue(getActualGrid(newValue), onEnd))
+        setValues(afterAnimValue)
       }, ANIMATION_TIMING)
     } else {
-      setValues(pushNewValue(getActualGrid(newValue), onEnd))
+      setValues(afterAnimValue)
     }
   }
 
