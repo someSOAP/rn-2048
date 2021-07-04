@@ -231,4 +231,49 @@ describe('moveRowLeft', () => {
 
     expect(leftMoved).toEqual(result)
   })
+
+  it('8 4 2 2', () => {
+    const result: ICell[] = [
+      {
+        value: 8,
+        x: 0,
+        y: 1,
+        merged: false,
+        next: { merged: false, y: 1, x: 0, value: 8 },
+      },
+      {
+        value: 4,
+        x: 1,
+        y: 1,
+        merged: false,
+        next: { merged: false, y: 1, x: 1, value: 4 },
+      },
+      {
+        value: 2,
+        x: 2,
+        y: 1,
+        merged: false,
+        next: { merged: true, y: 1, x: 2, value: 4 },
+      },
+      {
+        value: 2,
+        x: 3,
+        y: 1,
+        merged: false,
+        next: { value: 0, y: 1, x: 2, merged: true },
+      },
+    ]
+
+    const leftMoved = moveRowLeft(
+      [
+        { value: 8, x: 0, y: 1, merged: false },
+        { value: 4, x: 1, y: 1, merged: false },
+        { value: 2, x: 2, y: 1, merged: false },
+        { value: 2, x: 3, y: 1, merged: false },
+      ],
+      1
+    )
+
+    expect(leftMoved).toEqual(result)
+  })
 })

@@ -105,7 +105,7 @@ export const mergeRow = (initialRow: ICell[], iteration = 0): ICell[] => {
       y: iteration,
     }
 
-    return [array[0], array[1], ...mergeRow(array.slice(1), iteration + 1)]
+    return [array[0], array[1], ...mergeRow(array.slice(2), iteration + 1)]
   }
 
   array[0].next = {
@@ -194,11 +194,13 @@ export const getActualGrid = (grid: GridType): GridType => {
   const newGrid = cloneDeep(grid)
   for (const row of newGrid) {
     for (const cell of row) {
-      if (cell.next && cell.next.value !== 0) {
+      if (cell.next) {
         const { x, y } = cell
         const { x: nextX, y: nextY } = cell.next
         newGrid[y][x] = newCell(y, x)
-        newGrid[nextY][nextX] = cell.next
+        if (cell.next.value !== 0) {
+          newGrid[nextY][nextX] = cell.next
+        }
       }
     }
   }
