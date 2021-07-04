@@ -10,7 +10,7 @@ export const GRID_LENGTH = 4
 
 export const CELL_DIMENSION = 20 * vw
 
-export const ANIMATION_TIMING = 250 //ms
+export const ANIMATION_TIMING = 200 //ms
 
 export const ENABLE_ANIM = true
 

@@ -29,7 +29,7 @@ const ValueCell: FC<ICell> = (cell) => {
       {
         scale: mergeAnim.interpolate({
           inputRange: [0, 75, 100],
-          outputRange: [1, 1.2, 1],
+          outputRange: [1, 1.1, 1],
         }),
       },
       {
@@ -68,7 +68,11 @@ const ValueCell: FC<ICell> = (cell) => {
     }
   }, [offset, dir])
 
-  useEffect(animateMerge, [merged])
+  useEffect(() => {
+    if (merged) {
+      animateMerge()
+    }
+  }, [merged])
 
   return (
     <Animated.View style={style}>
