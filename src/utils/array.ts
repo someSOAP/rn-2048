@@ -234,3 +234,24 @@ export const canMoveLeft = (row: ICell[]): boolean => {
     canMoveLeft(row.slice(1))
   )
 }
+
+export const canMoveRight = (row: ICell[]): boolean => {
+  const rightRow = [...row].reverse()
+  return canMoveLeft(rightRow)
+}
+
+export const canMoveStraight = (grid: GridType): boolean => {
+  const result = grid.reduce((canMove, row) => {
+    return canMove || canMoveLeft(row)
+  }, false)
+
+  return result
+}
+
+export const canMoveReverse = (grid: GridType): boolean => {
+  const result = grid.reduce((canMove, row) => {
+    return canMove || canMoveRight(row)
+  }, false)
+
+  return result
+}

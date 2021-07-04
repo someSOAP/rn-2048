@@ -27,6 +27,8 @@ import {
   moveRowLeft,
   moveRowRight,
   getActualGrid,
+  canMoveStraight,
+  canMoveReverse,
 } from '@utils/array'
 import { GridType, MoveType } from '@/types'
 
@@ -81,6 +83,10 @@ const GameView: FC = () => {
       columns[colIndex] = moveColDown(column, colIndex)
     }
 
+    if (!canMoveReverse(columns)) {
+      return void 0
+    }
+
     const newMatrix: GridType = []
     for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
       newMatrix[rowIndex] = []
@@ -100,6 +106,10 @@ const GameView: FC = () => {
       columns[colIndex] = moveColUp(column, colIndex)
     }
 
+    if (!canMoveStraight(columns)) {
+      return void 0
+    }
+
     const newMatrix: GridType = []
     for (let rowIndex = 0; rowIndex < GRID_LENGTH; rowIndex++) {
       newMatrix[rowIndex] = []
@@ -112,6 +122,10 @@ const GameView: FC = () => {
   }
 
   const onSwipeLeft = () => {
+    if (!canMoveStraight(values)) {
+      return void 0
+    }
+
     const newMatrix = []
 
     for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
@@ -122,6 +136,10 @@ const GameView: FC = () => {
   }
 
   const onSwipeRight = () => {
+    if (!canMoveReverse(values)) {
+      return void 0
+    }
+
     const newMatrix = []
 
     for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
