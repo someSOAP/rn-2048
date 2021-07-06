@@ -13,6 +13,9 @@ export const gameSlice = createSlice({
   name: 'gridSlice',
   initialState,
   reducers: {
+    setGameState(state, { payload }: PayloadAction<IGame>) {
+      return payload
+    },
     updateGrid(state, { payload }: PayloadAction<GridType>) {
       state.grid = payload
     },
@@ -32,6 +35,7 @@ export const gameSlice = createSlice({
 })
 
 export const {
+  setGameState,
   updateGrid,
   setIsOver,
   setScore,

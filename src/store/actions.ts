@@ -5,6 +5,7 @@ import {
   ANIMATION_TIMING,
   BEST_SCORE_KEY,
   ENABLE_ANIM,
+  GAME_SATE_KEY,
 } from '@constants/initail'
 import {
   initGrid,
@@ -22,6 +23,7 @@ import {
 } from '@utils/array'
 import { GridType, RootState } from '@/types'
 import {
+  gameSelector,
   gameScoreSelector,
   gameBestScoreSelector,
   gameGridSelector,
@@ -64,7 +66,7 @@ export const updateScore =
 
 export const finnishMove =
   (newValue: GridType, plusScore: number): AppAction =>
-  (dispatch) => {
+  (dispatch, getState) => {
     batch(() => {
       dispatch(updateGrid(newValue))
       dispatch(updateScore(plusScore))
@@ -84,6 +86,11 @@ export const finnishMove =
     } else {
       dispatch(updateGrid(afterAnimValue))
     }
+
+    AsyncStorage.setItem(
+      GAME_SATE_KEY,
+      JSON.stringify(gameSelector(getState()))
+    )
   }
 
 export const moveDown = (): AppAction => (dispatch, getState) => {

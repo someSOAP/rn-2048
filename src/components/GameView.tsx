@@ -5,6 +5,7 @@ import GestureRecognizer from 'react-native-swipe-gestures'
 import { AsyncStorage } from 'react-native'
 
 import {
+  setGameState,
   gameGridSelector,
   gameIsOverSelector,
   gameScoreSelector,
@@ -24,7 +25,11 @@ import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
 import { Score } from '@components/Score'
-import { GESTURE_CONFIGS, BEST_SCORE_KEY } from '@constants/initail'
+import {
+  GESTURE_CONFIGS,
+  BEST_SCORE_KEY,
+  GAME_SATE_KEY,
+} from '@constants/initail'
 
 const GameView: FC = () => {
   const dispatch = useDispatch()
@@ -36,13 +41,27 @@ const GameView: FC = () => {
   const visibleModal = useSelector(gameVisibleModalSelector)
 
   useEffect(() => {
-    restart()
-
-    AsyncStorage.getItem(BEST_SCORE_KEY).then((bestScoreStr) => {
-      if (bestScoreStr) {
-        dispatch(setBestScore(parseInt(bestScoreStr)))
-      }
-    })
+    AsyncStorage.getItem(GAME_SATE_KEY)
+      .then((stateStr) => {
+        if (!stateStr) {
+          restart()
+          return void 0
+        }
+        try {
+          const lastState = JSON.parse(stateStr)
+          dispatch(setGameState(lastState))
+        } catch (err) {
+          restart()
+        }
+      })
+      .catch(() => {
+        AsyncStorage.getItem(BEST_SCORE_KEY).then((bestScoreStr) => {
+          if (bestScoreStr) {
+            dispatch(setBestScore(parseInt(bestScoreStr)))
+          }
+        })
+        restart()
+      })
   }, [])
 
   const toggleModal = () => dispatch(setVisibleModal(!visibleModal))

@@ -21,3 +21,4 @@ export const GESTURE_CONFIGS: GestureRecognizerConfig = {
 }
 
 export const BEST_SCORE_KEY = 'BEST_SCORE'
+export const GAME_SATE_KEY = 'GAME_SATE_KEY'
