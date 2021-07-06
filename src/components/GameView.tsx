@@ -11,11 +11,14 @@ import {
   gameIsOverSelector,
   gameScoreSelector,
   gameBestScoreSelector,
+  gameVisibleModalSelector,
   setBestScore,
+  setVisibleModal,
 } from '@/store'
 import { updateScore } from '@/store/actions'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
+import { Modal } from '@components/Modal'
 import {
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
@@ -47,8 +50,10 @@ const GameView: FC = () => {
   const isOver = useSelector(gameIsOverSelector)
   const score = useSelector(gameScoreSelector)
   const bestScore = useSelector(gameBestScoreSelector)
+  const visibleModal = useSelector(gameVisibleModalSelector)
 
   const setValues = (values: GridType) => dispatch(updateGrid(values))
+  const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
 
   useEffect(() => {
     setValues(initValues())
@@ -173,23 +178,23 @@ const GameView: FC = () => {
 
   return (
     <View style={styles.screen}>
-      {isOver ? (
-        <CustomButton onPress={onStartAgain}>Start Game </CustomButton>
-      ) : (
-        <>
-          <GestureRecognizer
-            onSwipeDown={onSwipeDown}
-            onSwipeLeft={onSwipeLeft}
-            onSwipeRight={onSwipeRight}
-            onSwipeUp={onSwipeUp}
-            config={GESTURE_CONFIGS}
-          >
-            <Grid values={values} />
-          </GestureRecognizer>
-          <Text>SCORE: {score}</Text>
-          <Text>BEST SCORE: {bestScore}</Text>
-        </>
-      )}
+      <CustomButton onPress={toggleModal}>SHOW MODAL</CustomButton>
+      <Modal
+        isVisible={visibleModal || isOver}
+        onPlay={toggleModal}
+        onReset={onStartAgain}
+      />
+      <GestureRecognizer
+        onSwipeDown={onSwipeDown}
+        onSwipeLeft={onSwipeLeft}
+        onSwipeRight={onSwipeRight}
+        onSwipeUp={onSwipeUp}
+        config={GESTURE_CONFIGS}
+      >
+        <Grid values={values} />
+      </GestureRecognizer>
+      <Text>SCORE: {score}</Text>
+      <Text>BEST SCORE: {bestScore}</Text>
     </View>
   )
 }

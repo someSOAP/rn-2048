@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { vw } from '@constants/window'
 import { CELL_DIMENSION } from '@constants/initail'
 import { ICell } from '@/types'
+import { mixins } from '@utils/mixins'
 import ValueCell from './ValueCell'
 
 export const Cell: FC<ICell> = (cell) => {
@@ -15,7 +16,7 @@ export const Cell: FC<ICell> = (cell) => {
 
 const styles = StyleSheet.create({
   backgroundCell: {
-    borderRadius: 12,
+    ...mixins.border,
     width: CELL_DIMENSION,
     height: CELL_DIMENSION,
     margin: vw,

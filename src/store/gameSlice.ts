@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { GridType, IGame, MoveType } from '@/types'
+import { GridType, IGame } from '@/types'
 
 const initialState: IGame = {
+  visibleModal: false,
   grid: [],
   isOver: true,
   score: 0,
@@ -24,10 +25,18 @@ export const gameSlice = createSlice({
     setScore(state, { payload }: PayloadAction<number>) {
       state.score = payload
     },
+    setVisibleModal(state, { payload }: PayloadAction<boolean>) {
+      state.visibleModal = payload
+    },
   },
 })
 
-export const { updateGrid, setIsOver, setScore, setBestScore } =
-  gameSlice.actions
+export const {
+  updateGrid,
+  setIsOver,
+  setScore,
+  setBestScore,
+  setVisibleModal,
+} = gameSlice.actions
 
 export default gameSlice.reducer

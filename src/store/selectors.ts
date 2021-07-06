@@ -8,6 +8,10 @@ export const gameSelector = createSelector(
   (state) => state.gameSlice
 )
 
+export const gameVisibleModalSelector = createSelector(
+  gameSelector,
+  (game) => game.visibleModal
+)
 export const gameGridSelector = createSelector(
   gameSelector,
   (game) => game.grid
