@@ -122,7 +122,7 @@ export const mergeRow = (
       y: iteration,
     }
 
-    score += array[0].value
+    score += array[0].next.value
 
     array[1].next = {
       merged: true,

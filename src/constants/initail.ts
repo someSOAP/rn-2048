@@ -19,3 +19,5 @@ export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   directionalOffsetThreshold: 40,
   gestureIsClickThreshold: 10,
 }
+
+export const BEST_SCORE_KEY = 'BEST_SCORE'

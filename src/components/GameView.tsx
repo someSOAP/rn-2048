@@ -2,6 +2,8 @@ import React, { FC, useEffect, useRef } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
+import { AsyncStorage } from 'react-native'
+
 import {
   updateGrid,
   setIsOver,
@@ -9,14 +11,16 @@ import {
   gameIsOverSelector,
   gameScoreSelector,
   gameBestScoreSelector,
-  updateScore,
+  setBestScore,
 } from '@/store'
+import { updateScore } from '@/store/actions'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import {
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
   ENABLE_ANIM,
+  BEST_SCORE_KEY,
 } from '@constants/initail'
 import {
   initValues,
@@ -48,6 +52,12 @@ const GameView: FC = () => {
 
   useEffect(() => {
     setValues(initValues())
+
+    AsyncStorage.getItem(BEST_SCORE_KEY).then((bestScoreStr) => {
+      if (bestScoreStr) {
+        dispatch(setBestScore(parseInt(bestScoreStr)))
+      }
+    })
   }, [])
 
   const onEnd = () => {
@@ -63,7 +73,7 @@ const GameView: FC = () => {
     prevState.current.state = values
     batch(() => {
       setValues(newValue)
-      dispatch(updateScore(score + plusScore))
+      dispatch(updateScore(plusScore))
     })
 
     const afterAnimValue = pushNewValue(getActualGrid(newValue))

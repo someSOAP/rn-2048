@@ -18,15 +18,16 @@ export const gameSlice = createSlice({
     setIsOver(state, { payload }: PayloadAction<boolean>) {
       state.isOver = payload
     },
-    updateScore(state, { payload }: PayloadAction<number>) {
+    setBestScore(state, { payload }: PayloadAction<number>) {
+      state.bestScore = payload
+    },
+    setScore(state, { payload }: PayloadAction<number>) {
       state.score = payload
-      if (payload > state.bestScore) {
-        state.bestScore = payload
-      }
     },
   },
 })
 
-export const { updateGrid, setIsOver, updateScore } = gameSlice.actions
+export const { updateGrid, setIsOver, setScore, setBestScore } =
+  gameSlice.actions
 
 export default gameSlice.reducer
