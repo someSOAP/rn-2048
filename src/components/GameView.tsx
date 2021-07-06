@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useRef } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { useSelector, useDispatch, batch } from 'react-redux'
+import React, { FC, useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import { AsyncStorage } from 'react-native'
 
@@ -15,37 +15,17 @@ import {
   setBestScore,
   setVisibleModal,
 } from '@/store'
-import { updateScore } from '@/store/actions'
+import { moveDown, moveLeft, moveRight, moveUp } from '@/store/actions'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
 import { Score } from '@components/Score'
-import {
-  GESTURE_CONFIGS,
-  ANIMATION_TIMING,
-  ENABLE_ANIM,
-  BEST_SCORE_KEY,
-} from '@constants/initail'
-import {
-  initValues,
-  pushNewValue,
-  moveColDown,
-  moveColUp,
-  moveRowLeft,
-  moveRowRight,
-  getActualGrid,
-  canMoveStraight,
-  canMoveReverse,
-  transposeGrid,
-  checkGameEnd,
-  detranspose,
-} from '@utils/array'
+import { GESTURE_CONFIGS, BEST_SCORE_KEY } from '@constants/initail'
+import { initValues } from '@utils/array'
 import { GridType } from '@/types'
 
 const GameView: FC = () => {
   const dispatch = useDispatch()
-
-  const prevState = useRef<{ state: GridType | null }>({ state: null })
 
   const values = useSelector(gameGridSelector)
   const isOver = useSelector(gameIsOverSelector)
@@ -66,116 +46,15 @@ const GameView: FC = () => {
     })
   }, [])
 
-  const onEnd = () => {
-    dispatch(setIsOver(true))
-  }
-
   const onStartAgain = () => {
     setValues(initValues())
     dispatch(setIsOver(false))
   }
 
-  const onMoveDone = (newValue: GridType, plusScore: number) => {
-    prevState.current.state = values
-    batch(() => {
-      setValues(newValue)
-      dispatch(updateScore(plusScore))
-    })
-
-    const afterAnimValue = pushNewValue(getActualGrid(newValue))
-
-    if (checkGameEnd(afterAnimValue)) {
-      onEnd()
-      return void 0
-    }
-
-    if (ENABLE_ANIM) {
-      setTimeout(() => {
-        setValues(afterAnimValue)
-      }, ANIMATION_TIMING)
-    } else {
-      setValues(afterAnimValue)
-    }
-  }
-
-  const onSwipeDown = () => {
-    let columns = transposeGrid(values)
-
-    if (!canMoveReverse(columns)) {
-      return void 0
-    }
-
-    let plusScore = 0
-    const scoreCounter = (score: number) => {
-      plusScore += score
-    }
-
-    columns = columns.map((column, colIndex) => {
-      return moveColDown(column, colIndex, scoreCounter)
-    })
-
-    const newMatrix = detranspose(columns)
-
-    onMoveDone(newMatrix, plusScore)
-  }
-
-  const onSwipeUp = () => {
-    let columns = transposeGrid(values)
-
-    if (!canMoveStraight(columns)) {
-      return void 0
-    }
-
-    let plusScore = 0
-    const scoreCounter = (score: number) => {
-      plusScore += score
-    }
-
-    columns = columns.map((column, colIndex) => {
-      return moveColUp(column, colIndex, scoreCounter)
-    })
-
-    const newMatrix = detranspose(columns)
-    onMoveDone(newMatrix, plusScore)
-  }
-
-  const onSwipeLeft = () => {
-    if (!canMoveStraight(values)) {
-      return void 0
-    }
-
-    const newMatrix = []
-
-    let plusScore = 0
-    const scoreCounter = (score: number) => {
-      plusScore += score
-    }
-
-    for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
-      const row = values[rowIndex]
-      newMatrix.push(moveRowLeft(row, rowIndex, scoreCounter))
-    }
-    onMoveDone(newMatrix, plusScore)
-  }
-
-  const onSwipeRight = () => {
-    if (!canMoveReverse(values)) {
-      return void 0
-    }
-
-    const newMatrix = []
-
-    let plusScore = 0
-    const scoreCounter = (score: number) => {
-      plusScore += score
-    }
-
-    for (let rowIndex = 0; rowIndex < values.length; rowIndex++) {
-      const row = values[rowIndex]
-      newMatrix.push(moveRowRight(row, rowIndex, scoreCounter))
-    }
-    onMoveDone(newMatrix, plusScore)
-  }
+  const onSwipeDown = () => dispatch(moveDown())
+  const onSwipeUp = () => dispatch(moveUp())
+  const onSwipeLeft = () => dispatch(moveLeft())
+  const onSwipeRight = () => dispatch(moveRight())
 
   return (
     <View style={styles.screen}>
