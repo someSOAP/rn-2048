@@ -174,13 +174,9 @@ const GameView: FC = () => {
   return (
     <View style={styles.screen}>
       {isOver ? (
-        <CustomButton onPress={onStartAgain}>Start Again</CustomButton>
+        <CustomButton onPress={onStartAgain}>Start Game </CustomButton>
       ) : (
         <>
-          <CustomButton onPress={onSwipeUp}>UP</CustomButton>
-          <CustomButton onPress={onSwipeDown}>DOWN</CustomButton>
-          <CustomButton onPress={onSwipeLeft}>LEFT</CustomButton>
-          <CustomButton onPress={onSwipeRight}>RIGHT</CustomButton>
           <GestureRecognizer
             onSwipeDown={onSwipeDown}
             onSwipeLeft={onSwipeLeft}
