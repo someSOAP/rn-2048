@@ -7,6 +7,7 @@ import {
   ENABLE_ANIM,
 } from '@constants/initail'
 import {
+  initGrid,
   canMoveReverse,
   canMoveStraight,
   checkGameEnd,
@@ -25,9 +26,24 @@ import {
   gameBestScoreSelector,
   gameGridSelector,
 } from './selectors'
-import { setScore, setBestScore, setIsOver, updateGrid } from './gameSlice'
+import {
+  setScore,
+  setBestScore,
+  setIsOver,
+  updateGrid,
+  setVisibleModal,
+} from './gameSlice'
 
 type AppAction = ThunkAction<void, RootState, unknown, Action>
+
+export const startNewGame = (): AppAction => (dispatch) => {
+  batch(() => {
+    dispatch(setScore(0))
+    dispatch(setVisibleModal(false))
+    dispatch(updateGrid(initGrid()))
+    dispatch(setIsOver(false))
+  })
+}
 
 export const updateScore =
   (plusScore: number): AppAction =>

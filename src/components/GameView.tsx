@@ -5,8 +5,6 @@ import GestureRecognizer from 'react-native-swipe-gestures'
 import { AsyncStorage } from 'react-native'
 
 import {
-  updateGrid,
-  setIsOver,
   gameGridSelector,
   gameIsOverSelector,
   gameScoreSelector,
@@ -15,14 +13,18 @@ import {
   setBestScore,
   setVisibleModal,
 } from '@/store'
-import { moveDown, moveLeft, moveRight, moveUp } from '@/store/actions'
+import {
+  moveDown,
+  moveLeft,
+  moveRight,
+  moveUp,
+  startNewGame,
+} from '@/store/actions'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
 import { Score } from '@components/Score'
 import { GESTURE_CONFIGS, BEST_SCORE_KEY } from '@constants/initail'
-import { initValues } from '@utils/array'
-import { GridType } from '@/types'
 
 const GameView: FC = () => {
   const dispatch = useDispatch()
@@ -33,11 +35,8 @@ const GameView: FC = () => {
   const bestScore = useSelector(gameBestScoreSelector)
   const visibleModal = useSelector(gameVisibleModalSelector)
 
-  const setValues = (values: GridType) => dispatch(updateGrid(values))
-  const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
-
   useEffect(() => {
-    setValues(initValues())
+    restart()
 
     AsyncStorage.getItem(BEST_SCORE_KEY).then((bestScoreStr) => {
       if (bestScoreStr) {
@@ -46,11 +45,8 @@ const GameView: FC = () => {
     })
   }, [])
 
-  const onStartAgain = () => {
-    setValues(initValues())
-    dispatch(setIsOver(false))
-  }
-
+  const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
+  const restart = () => dispatch(startNewGame())
   const onSwipeDown = () => dispatch(moveDown())
   const onSwipeUp = () => dispatch(moveUp())
   const onSwipeLeft = () => dispatch(moveLeft())
@@ -62,7 +58,7 @@ const GameView: FC = () => {
       <Modal
         isVisible={visibleModal || isOver}
         onPlay={toggleModal}
-        onReset={onStartAgain}
+        onReset={restart}
       />
       <View style={styles.scorePanel}>
         <Score score={score} />

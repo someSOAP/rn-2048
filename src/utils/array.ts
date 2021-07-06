@@ -37,7 +37,7 @@ export const detranspose = (grid: GridType): GridType => {
   return newMatrix
 }
 
-export const initValues = (): GridType => {
+export const initGrid = (): GridType => {
   const matrix: GridType = []
   const freeCells: [number, number][] = []
 
