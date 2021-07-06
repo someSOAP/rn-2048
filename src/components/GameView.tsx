@@ -19,6 +19,7 @@ import { updateScore } from '@/store/actions'
 import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
+import { Score } from '@components/Score'
 import {
   GESTURE_CONFIGS,
   ANIMATION_TIMING,
@@ -184,6 +185,10 @@ const GameView: FC = () => {
         onPlay={toggleModal}
         onReset={onStartAgain}
       />
+      <View style={styles.scorePanel}>
+        <Score score={score} />
+        <Score score={bestScore} />
+      </View>
       <GestureRecognizer
         onSwipeDown={onSwipeDown}
         onSwipeLeft={onSwipeLeft}
@@ -193,13 +198,17 @@ const GameView: FC = () => {
       >
         <Grid values={values} />
       </GestureRecognizer>
-      <Text>SCORE: {score}</Text>
-      <Text>BEST SCORE: {bestScore}</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  scorePanel: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: 30,
+  },
   screen: {
     backgroundColor: 'rgb(250, 248, 239)',
     flex: 1,
