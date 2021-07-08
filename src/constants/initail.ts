@@ -16,8 +16,8 @@ export const ENABLE_ANIM = true
 
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   velocityThreshold: 0.3,
-  directionalOffsetThreshold: 40,
-  gestureIsClickThreshold: 10,
+  directionalOffsetThreshold: 80,
+  gestureIsClickThreshold: 5,
 }
 
 export const FREDOKA_FONT = 'FREDOKA_FONT'
