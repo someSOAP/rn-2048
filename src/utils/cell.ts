@@ -1,11 +1,20 @@
 import { ICell, ICellMove } from '@/types'
-import { ViewStyle } from 'react-native'
-import { COLORS_MAP } from '@constants/colors'
+import { TextStyle, ViewStyle } from 'react-native'
+import { COLORS_MAP, FINAL, TEXT_DARK, TEXT_BRIGHT } from '@constants/colors'
 
-export const mapColor = (value: number): ViewStyle => {
-  const backgroundColor = COLORS_MAP.get(value) ?? 'green'
+export const mapBackgroundColor = (value: number): ViewStyle => {
+  const style: ViewStyle = {
+    backgroundColor: COLORS_MAP.get(value) ?? FINAL,
+  }
 
-  return { backgroundColor }
+  return style
+}
+
+export const mapTextColor = (value: number): TextStyle => {
+  const style: TextStyle = {
+    color: value <= 4 ? TEXT_DARK : TEXT_BRIGHT,
+  }
+  return style
 }
 
 export const getMoveOffset = (cell: ICell): ICellMove => {

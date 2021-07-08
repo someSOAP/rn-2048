@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import { Cell } from './Cell'
 import { vw } from '@constants/window'
 import { GridType, ICell } from '@/types'
+import { GRID_COLOR } from '@constants/colors'
 
 interface IGridProps {
   values: GridType
@@ -30,7 +31,7 @@ export const Grid: FC<IGridProps> = ({ values }) => {
 
 const styles = StyleSheet.create({
   grid: {
-    backgroundColor: 'rgb(187, 173, 160)',
+    backgroundColor: GRID_COLOR,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,

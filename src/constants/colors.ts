@@ -1,14 +1,20 @@
-export const WHITE = 'rgb(238, 228, 218)'
-export const MILKY = 'rgb(237, 224, 200)'
-export const LIGHT_ORANGE = 'rgb(242, 177, 121)'
-export const ORANGE = 'rgb(245, 149, 99)'
-export const DEEP_ORANGE = 'rgb(246, 124, 95)'
-export const RED = 'rgb(246, 94, 59)'
-export const LIGHT_YELLOW = 'rgb(237, 207, 114)'
-export const YELLOW = 'rgb(237, 204, 97)'
-export const SUNNY_YELLOW = 'rgb(237, 200, 80)'
-export const DEEP_YELLOW = 'rgb(237, 197, 63)'
-export const GREEN = 'rgb(49,176,51)'
+export const WHITE = '#eee4da' //#776e65
+export const MILKY = '#ede0c8' //#776e65
+export const LIGHT_ORANGE = '#f2b179' //#f9f6f2
+export const ORANGE = '#f59563' //#f9f6f2
+export const DEEP_ORANGE = '#f67c5f' //#f9f6f2
+export const RED = '#f65e3b' //#f9f6f2
+export const LIGHT_YELLOW = '#edcf72' //#f9f6f2
+export const YELLOW = '#edcc61' //#f9f6f2
+export const SUNNY_YELLOW = '#edc850' //#f9f6f2
+export const DEEP_YELLOW = '#edc53f' //#f9f6f2
+export const FINAL = '#edc22e' //#f9f6f2
+
+export const TEXT_DARK = '#776e65'
+export const TEXT_BRIGHT = '#f9f6f2'
+
+export const GRID_COLOR = 'rgb(187, 173, 160)'
+export const CELL_COLOR = 'rgb(205, 193, 180)'
 
 export const COLORS_MAP = new Map<number, string>([
   [2, WHITE],
@@ -21,5 +27,5 @@ export const COLORS_MAP = new Map<number, string>([
   [256, YELLOW],
   [512, SUNNY_YELLOW],
   [1024, DEEP_YELLOW],
-  [2048, GREEN],
+  [2048, FINAL],
 ])

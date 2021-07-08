@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { Text, StyleSheet, Animated } from 'react-native'
+import { StyleSheet, Animated } from 'react-native'
 import { vw } from '@constants/window'
 import {
   CELL_DIMENSION,
@@ -7,7 +7,7 @@ import {
   ANIMATION_TIMING,
 } from '@constants/initail'
 import { ICell } from '@/types'
-import { getMoveOffset, mapColor } from '@utils/cell'
+import { getMoveOffset, mapBackgroundColor, mapTextColor } from '@utils/cell'
 import { CustomText } from './CustomText'
 
 const getAnimFunction = (animValue: Animated.Value) => () => {
@@ -28,7 +28,9 @@ const ValueCell: FC<ICell> = (cell) => {
 
   const { value, merged } = cell
 
-  const style = Object.assign({}, styles.cell, mapColor(value), {
+  const textStyle = Object.assign({}, mapTextColor(value), styles.cellText)
+
+  const style = Object.assign({}, styles.cell, mapBackgroundColor(value), {
     transform: [
       {
         scale: mergeAnim.interpolate({
@@ -80,7 +82,7 @@ const ValueCell: FC<ICell> = (cell) => {
 
   return (
     <Animated.View style={style}>
-      <CustomText style={styles.cellText}>{value || ''}</CustomText>
+      <CustomText style={textStyle}>{value || ''}</CustomText>
     </Animated.View>
   )
 }

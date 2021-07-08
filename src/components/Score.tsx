@@ -1,6 +1,6 @@
 import React, { FC, useRef } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { MILKY } from '@constants/colors'
+import { CELL_COLOR, MILKY, TEXT_DARK } from '@constants/colors'
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
 import { AnimatedDiff } from './AnimatedDiff'
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     ...mixins.border,
     padding: 10,
     width: 30 * vw,
-    backgroundColor: MILKY,
+    backgroundColor: CELL_COLOR,
     flexDirection: 'row',
     justifyContent: 'center',
   },

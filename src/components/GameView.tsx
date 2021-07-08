@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import { AsyncStorage } from 'react-native'
+import { WHITE } from '@constants/colors'
 
 import {
   setGameState,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   screen: {
-    backgroundColor: 'rgb(250, 248, 239)',
+    backgroundColor: WHITE,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
