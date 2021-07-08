@@ -5,15 +5,17 @@ import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
 import { AnimatedDiff } from './AnimatedDiff'
 import { CustomText } from './CustomText'
+import { Ionicons } from '@expo/vector-icons'
 interface IScoreRef {
   value: number
 }
 
 interface IScoreProps {
   score: number
+  icon?: string
 }
 
-export const Score: FC<IScoreProps> = ({ score }) => {
+export const Score: FC<IScoreProps> = ({ score, icon }) => {
   const prevScore = useRef<IScoreRef>({ value: score }).current
 
   const diff = score - prevScore.value
@@ -24,6 +26,7 @@ export const Score: FC<IScoreProps> = ({ score }) => {
     <View style={styles.score}>
       <CustomText style={styles.text}>{score}</CustomText>
       <AnimatedDiff diff={diff} />
+      <Ionicons name={icon as any} size={20} color={TEXT_DARK} />
     </View>
   )
 }
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
     width: 30 * vw,
     backgroundColor: CELL_COLOR,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   },
   text: {
     fontSize: 20,

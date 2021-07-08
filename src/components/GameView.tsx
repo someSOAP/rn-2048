@@ -26,6 +26,7 @@ import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
 import { Score } from '@components/Score'
+import { IconButton } from '@components/IconButton'
 import {
   GESTURE_CONFIGS,
   BEST_SCORE_KEY,
@@ -74,15 +75,15 @@ const GameView: FC = () => {
 
   return (
     <View style={styles.screen}>
-      <CustomButton onPress={toggleModal}>SHOW MODAL</CustomButton>
+      <IconButton onPress={toggleModal} icon="menu" />
       <Modal
         isVisible={visibleModal || isOver}
         onPlay={toggleModal}
         onReset={restart}
       />
       <View style={styles.scorePanel}>
-        <Score score={score} />
-        <Score score={bestScore} />
+        <Score score={score} icon="chevron-up-outline" />
+        <Score score={bestScore} icon="trophy-outline" />
       </View>
       <GestureRecognizer
         onSwipeDown={onSwipeDown}
