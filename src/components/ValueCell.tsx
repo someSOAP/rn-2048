@@ -1,10 +1,14 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { Text, StyleSheet, Animated } from 'react-native'
 import { vw } from '@constants/window'
-import { CELL_DIMENSION, ENABLE_ANIM } from '@constants/initail'
+import {
+  CELL_DIMENSION,
+  ENABLE_ANIM,
+  ANIMATION_TIMING,
+} from '@constants/initail'
 import { ICell } from '@/types'
 import { getMoveOffset, mapColor } from '@utils/cell'
-import { ANIMATION_TIMING } from '@constants/initail'
+import { CustomText } from './CustomText'
 
 const getAnimFunction = (animValue: Animated.Value) => () => {
   Animated.timing(animValue, {
@@ -76,7 +80,7 @@ const ValueCell: FC<ICell> = (cell) => {
 
   return (
     <Animated.View style={style}>
-      <Text style={styles.cellText}>{value || ''}</Text>
+      <CustomText style={styles.cellText}>{value || ''}</CustomText>
     </Animated.View>
   )
 }

@@ -20,5 +20,7 @@ export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   gestureIsClickThreshold: 10,
 }
 
+export const FREDOKA_FONT = 'FREDOKA_FONT'
+
 export const BEST_SCORE_KEY = 'BEST_SCORE'
 export const GAME_SATE_KEY = 'GAME_SATE_KEY'

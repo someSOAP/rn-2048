@@ -1,9 +1,10 @@
 import React, { FC, useRef } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { MILKY } from '@constants/colors'
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
 import { AnimatedDiff } from './AnimatedDiff'
+import { CustomText } from './CustomText'
 interface IScoreRef {
   value: number
 }
@@ -21,7 +22,7 @@ export const Score: FC<IScoreProps> = ({ score }) => {
 
   return (
     <View style={styles.score}>
-      <Text style={styles.text}>{score}</Text>
+      <CustomText style={styles.text}>{score}</CustomText>
       <AnimatedDiff diff={diff} />
     </View>
   )

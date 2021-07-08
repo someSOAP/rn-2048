@@ -1,6 +1,7 @@
 import React, { FC, memo, useEffect, useRef } from 'react'
-import { StyleSheet, Animated, Text } from 'react-native'
+import { StyleSheet, Animated } from 'react-native'
 import { ANIMATION_TIMING, CELL_DIMENSION } from '@constants/initail'
+import CustomText from './CustomText'
 
 interface IAnimatedDiffProps {
   diff: number
@@ -39,7 +40,7 @@ export const AnimatedDiff: FC<IAnimatedDiffProps> = ({ diff }) => {
 
   return (
     <Animated.View style={animatedStyle}>
-      <Text style={styles.text}>+{String(diff)}</Text>
+      <CustomText style={styles.text}>+{String(diff)}</CustomText>
     </Animated.View>
   )
 }
