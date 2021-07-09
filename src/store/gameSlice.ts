@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GridType, IGame } from '@/types'
 
 const initialState: IGame = {
+  isLoaded: false,
   visibleModal: false,
   grid: [],
   isOver: true,
@@ -13,6 +14,9 @@ export const gameSlice = createSlice({
   name: 'gridSlice',
   initialState,
   reducers: {
+    setGameIsLoaded(state, { payload }: PayloadAction<boolean>) {
+      state.isLoaded = payload
+    },
     setGameState(state, { payload }: PayloadAction<IGame>) {
       return payload
     },
@@ -35,6 +39,7 @@ export const gameSlice = createSlice({
 })
 
 export const {
+  setGameIsLoaded,
   setGameState,
   updateGrid,
   setIsOver,

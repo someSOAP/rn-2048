@@ -5,6 +5,7 @@ import {
   ANIMATION_TIMING,
   BEST_SCORE_KEY,
   ENABLE_ANIM,
+  FREDOKA_FONT,
   GAME_SATE_KEY,
 } from '@constants/initail'
 import {
@@ -21,7 +22,7 @@ import {
   pushNewValue,
   transposeGrid,
 } from '@utils/array'
-import { GridType, RootState } from '@/types'
+import { GridType, IGame, RootState } from '@/types'
 import {
   gameSelector,
   gameScoreSelector,
@@ -34,7 +35,10 @@ import {
   setIsOver,
   updateGrid,
   setVisibleModal,
+  setGameState,
+  setGameIsLoaded,
 } from './gameSlice'
+import { loadAsync } from 'expo-font'
 
 type AppAction = ThunkAction<void, RootState, unknown, Action>
 
@@ -45,6 +49,52 @@ export const startNewGame = (): AppAction => (dispatch) => {
     dispatch(updateGrid(initGrid()))
     dispatch(setIsOver(false))
   })
+}
+
+export const loadGame = (): AppAction => async (dispatch) => {
+  const restart = () => {
+    batch(() => {
+      dispatch(setGameIsLoaded(true))
+      dispatch(startNewGame())
+    })
+  }
+
+  await loadAsync({
+    [FREDOKA_FONT]: require('../../assets/FredokaOne-Regular.ttf'),
+  })
+
+  AsyncStorage.getItem(GAME_SATE_KEY)
+    .then((stateStr) => {
+      if (!stateStr) {
+        restart()
+        return void 0
+      }
+      try {
+        const lastState: IGame = JSON.parse(stateStr)
+        const cleanState: IGame = {
+          ...lastState,
+          grid: getActualGrid(lastState.grid),
+        }
+
+        batch(() => {
+          dispatch(setGameState(cleanState))
+          dispatch(setGameIsLoaded(true))
+        })
+      } catch (err) {
+        restart()
+      }
+    })
+    .catch(() => {
+      AsyncStorage.getItem(BEST_SCORE_KEY).then((bestScoreStr) => {
+        if (bestScoreStr) {
+          batch(() => {
+            dispatch(setGameIsLoaded(true))
+            dispatch(setBestScore(parseInt(bestScoreStr)))
+          })
+        }
+      })
+      restart()
+    })
 }
 
 export const updateScore =

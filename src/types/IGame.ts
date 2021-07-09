@@ -12,6 +12,7 @@ export interface IMergeResult {
 export type ScoreCounterType = (score: number) => void
 
 export interface IGame {
+  isLoaded: boolean
   visibleModal: boolean
   grid: GridType
   isOver: boolean
