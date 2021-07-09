@@ -4,6 +4,7 @@ import { INITIAL_MODAL_TEXT } from '@constants/initail'
 
 const initialState: IGame = {
   isLoaded: false,
+  isVictory: false,
   visibleModal: false,
   modalText: INITIAL_MODAL_TEXT,
   grid: [],
@@ -18,6 +19,9 @@ export const gameSlice = createSlice({
   reducers: {
     setGameIsLoaded(state, { payload }: PayloadAction<boolean>) {
       state.isLoaded = payload
+    },
+    setIsVictory(state, { payload }: PayloadAction<boolean>) {
+      state.isVictory = payload
     },
     setGameState(state, { payload }: PayloadAction<IGame>) {
       return payload
@@ -45,6 +49,7 @@ export const gameSlice = createSlice({
 
 export const {
   setGameIsLoaded,
+  setIsVictory,
   setGameState,
   updateGrid,
   setIsOver,

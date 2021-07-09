@@ -9,6 +9,7 @@ import {
   GAME_OVER,
   GAME_SATE_KEY,
   INITIAL_MODAL_TEXT,
+  VICTORY,
 } from '@constants/initail'
 import {
   initGrid,
@@ -23,6 +24,7 @@ import {
   moveRowRight,
   pushNewValue,
   transposeGrid,
+  checkWin,
 } from '@utils/array'
 import { GridType, IGame, RootState } from '@/types'
 import {
@@ -30,6 +32,7 @@ import {
   gameScoreSelector,
   gameBestScoreSelector,
   gameGridSelector,
+  gameIsVictorySelector,
 } from './selectors'
 import {
   setScore,
@@ -40,6 +43,7 @@ import {
   setModalText,
   setGameState,
   setGameIsLoaded,
+  setIsVictory,
 } from './gameSlice'
 import { loadAsync } from 'expo-font'
 
@@ -51,6 +55,7 @@ export const startNewGame = (): AppAction => (dispatch) => {
     dispatch(setVisibleModal(false))
     dispatch(updateGrid(initGrid()))
     dispatch(setIsOver(false))
+    dispatch(setIsVictory(false))
     dispatch(setModalText(INITIAL_MODAL_TEXT))
   })
 }
@@ -118,9 +123,12 @@ export const updateScore =
     })
   }
 
-export const finnishMove =
+export const finishMove =
   (newValue: GridType, plusScore: number): AppAction =>
   (dispatch, getState) => {
+    const state = getState()
+    const isVictory = gameIsVictorySelector(state)
+
     batch(() => {
       dispatch(updateGrid(newValue))
       dispatch(updateScore(plusScore))
@@ -139,15 +147,17 @@ export const finnishMove =
     if (ENABLE_ANIM) {
       setTimeout(() => {
         dispatch(updateGrid(afterAnimValue))
+        if (!isVictory && checkWin(afterAnimValue)) {
+          dispatch(setIsVictory(true))
+          dispatch(setVisibleModal(true))
+          dispatch(setModalText(VICTORY))
+        }
       }, ANIMATION_TIMING)
     } else {
       dispatch(updateGrid(afterAnimValue))
     }
 
-    AsyncStorage.setItem(
-      GAME_SATE_KEY,
-      JSON.stringify(gameSelector(getState()))
-    )
+    AsyncStorage.setItem(GAME_SATE_KEY, JSON.stringify(gameSelector(state)))
   }
 
 export const moveDown = (): AppAction => (dispatch, getState) => {
@@ -170,7 +180,7 @@ export const moveDown = (): AppAction => (dispatch, getState) => {
 
   const newMatrix = detranspose(columns)
 
-  dispatch(finnishMove(newMatrix, plusScore))
+  dispatch(finishMove(newMatrix, plusScore))
 }
 
 export const moveUp = (): AppAction => (dispatch, getState) => {
@@ -192,7 +202,7 @@ export const moveUp = (): AppAction => (dispatch, getState) => {
   })
 
   const newMatrix = detranspose(columns)
-  dispatch(finnishMove(newMatrix, plusScore))
+  dispatch(finishMove(newMatrix, plusScore))
 }
 
 export const moveLeft = (): AppAction => (dispatch, getState) => {
@@ -214,7 +224,7 @@ export const moveLeft = (): AppAction => (dispatch, getState) => {
     newMatrix.push(moveRowLeft(row, rowIndex, scoreCounter))
   }
 
-  dispatch(finnishMove(newMatrix, plusScore))
+  dispatch(finishMove(newMatrix, plusScore))
 }
 
 export const moveRight = (): AppAction => (dispatch, getState) => {
@@ -236,5 +246,5 @@ export const moveRight = (): AppAction => (dispatch, getState) => {
     newMatrix.push(moveRowRight(row, rowIndex, scoreCounter))
   }
 
-  dispatch(finnishMove(newMatrix, plusScore))
+  dispatch(finishMove(newMatrix, plusScore))
 }

@@ -319,3 +319,18 @@ export const checkGameEnd = (grid: GridType): boolean => {
     canMoveReverse(transposedGrid)
   )
 }
+
+export const checkWin = (grid: GridType): boolean => {
+  let victory = false
+
+  for (const row of grid) {
+    if (victory) break
+    for (const cell of row) {
+      if (victory) break
+      if (cell.value === 2048) {
+        victory = true
+      }
+    }
+  }
+  return victory
+}

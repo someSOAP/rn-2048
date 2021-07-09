@@ -6,7 +6,6 @@ import { vw } from '@constants/window'
 import { CELL_COLOR } from '@constants/colors'
 
 export const BackGroundCell: FC = () => {
-  console.log('rendered')
   return <View style={styles.backgroundCell} />
 }
 

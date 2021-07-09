@@ -56,7 +56,7 @@ export const Modal: FC = () => {
 const styles = StyleSheet.create({
   modalText: {
     textAlign: 'center',
-    fontSize: CELL_DIMENSION,
+    fontSize: CELL_DIMENSION / 1.5,
     color: TEXT_BRIGHT,
   },
   wrapper: {
