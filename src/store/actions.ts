@@ -80,13 +80,8 @@ export const loadGame = (): AppAction => async (dispatch) => {
       }
       try {
         const lastState: IGame = JSON.parse(stateStr)
-        const cleanState: IGame = {
-          ...lastState,
-          grid: getActualGrid(lastState.grid),
-        }
-
         batch(() => {
-          dispatch(setGameState(cleanState))
+          dispatch(setGameState(lastState))
           dispatch(setGameIsLoaded(true))
         })
       } catch (err) {
