@@ -2,9 +2,10 @@ import React, { FC, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet, Text } from 'react-native'
 import { TEXT_DARK, WHITE } from '@constants/colors'
+import { gameIsLoadedSelector } from '@/store'
 import { Header } from './Header'
 import { GameView } from './GameView'
-import { gameIsLoadedSelector } from '@/store'
+import { Modal } from './Modal'
 
 import { loadGame } from '@/store/actions'
 
@@ -27,6 +28,7 @@ export const GameWrapper: FC = () => {
   return (
     <View style={styles.gameWrapper}>
       <Header />
+      <Modal />
       <GameView />
     </View>
   )

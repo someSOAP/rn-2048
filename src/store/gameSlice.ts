@@ -4,6 +4,7 @@ import { GridType, IGame } from '@/types'
 const initialState: IGame = {
   isLoaded: false,
   visibleModal: false,
+  modalText: '2048',
   grid: [],
   isOver: true,
   score: 0,
@@ -34,6 +35,9 @@ export const gameSlice = createSlice({
     },
     setVisibleModal(state, { payload }: PayloadAction<boolean>) {
       state.visibleModal = payload
+    },
+    setModalText(state, { payload }: PayloadAction<string>) {
+      state.modalText = payload
     },
   },
 })

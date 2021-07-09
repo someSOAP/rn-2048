@@ -1,23 +1,54 @@
 import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet, Modal as RNModal } from 'react-native'
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
-import { GRID_COLOR } from '@constants/colors'
+import { GRID_COLOR, MILKY, TEXT_BRIGHT, WHITE } from '@constants/colors'
+import { CELL_DIMENSION } from '@constants/initail'
 import { IconButton } from './IconButton'
+import { CustomText } from './CustomText'
+import {
+  gameModalTextSelector,
+  gameVisibleModalSelector,
+  gameIsOverSelector,
+  setVisibleModal,
+} from '@/store'
+import { startNewGame } from '@/store/actions'
 
-interface IModalProps {
-  isVisible: boolean
-  onPlay: () => void
-  onReset: () => void
-}
+export const Modal: FC = () => {
+  const dispatch = useDispatch()
+  const visibleModal = useSelector(gameVisibleModalSelector)
+  const isOver = useSelector(gameIsOverSelector)
+  const text = useSelector(gameModalTextSelector)
 
-export const Modal: FC<IModalProps> = ({ isVisible, onPlay, onReset }) => {
+  const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
+  const restart = () => dispatch(startNewGame())
+
+  console.log(text)
+
   return (
-    <RNModal animationType="fade" transparent={true} visible={isVisible}>
+    <RNModal
+      animationType="fade"
+      transparent={true}
+      visible={visibleModal || isOver}
+    >
       <View style={styles.wrapper}>
         <View style={styles.content}>
-          <IconButton onPress={onPlay} icon="play-outline" />
-          <IconButton onPress={onReset} icon="refresh-outline" />
+          {text && <CustomText style={styles.modalText}>{text}</CustomText>}
+          <View style={styles.buttonsRow}>
+            {!isOver && (
+              <IconButton
+                onPress={toggleModal}
+                style={styles.button}
+                icon="play-outline"
+              />
+            )}
+            <IconButton
+              onPress={restart}
+              style={styles.button}
+              icon="refresh-outline"
+            />
+          </View>
         </View>
       </View>
     </RNModal>
@@ -25,20 +56,34 @@ export const Modal: FC<IModalProps> = ({ isVisible, onPlay, onReset }) => {
 }
 
 const styles = StyleSheet.create({
+  modalText: {
+    textAlign: 'center',
+    fontSize: CELL_DIMENSION,
+    color: TEXT_BRIGHT,
+  },
   wrapper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
+  button: {
+    width: 1.2 * CELL_DIMENSION,
+    height: 1.2 * CELL_DIMENSION,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...mixins.border,
+    backgroundColor: MILKY,
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
   content: {
     elevation: 30,
     ...mixins.border,
-    flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
-    borderWidth: 3 * vw,
-    borderColor: GRID_COLOR,
+    alignItems: 'stretch',
     backgroundColor: GRID_COLOR,
     height: 80 * vw,
     width: 80 * vw,

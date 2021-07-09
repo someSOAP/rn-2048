@@ -18,6 +18,11 @@ export const gameVisibleModalSelector = createSelector(
   (game) => game.visibleModal
 )
 
+export const gameModalTextSelector = createSelector(
+  gameSelector,
+  (game) => game.modalText
+)
+
 export const gameGridSelector = createSelector(
   gameSelector,
   (game) => game.grid
