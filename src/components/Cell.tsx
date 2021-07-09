@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     height: CELL_DIMENSION,
     margin: vw,
     backgroundColor: CELL_COLOR,
+    zIndex: 0,
   },
 })
 

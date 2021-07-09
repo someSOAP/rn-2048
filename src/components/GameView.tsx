@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import { AsyncStorage } from 'react-native'
-import { WHITE } from '@constants/colors'
 
 import {
   setGameState,
@@ -22,18 +21,16 @@ import {
   moveUp,
   startNewGame,
 } from '@/store/actions'
-import CustomButton from '@components/CustomButton'
 import { Grid } from '@components/Grid'
 import { Modal } from '@components/Modal'
 import { Score } from '@components/Score'
-import { IconButton } from '@components/IconButton'
 import {
   GESTURE_CONFIGS,
   BEST_SCORE_KEY,
   GAME_SATE_KEY,
 } from '@constants/initail'
 
-const GameView: FC = () => {
+export const GameView: FC = () => {
   const dispatch = useDispatch()
 
   const values = useSelector(gameGridSelector)
@@ -75,7 +72,6 @@ const GameView: FC = () => {
 
   return (
     <View style={styles.screen}>
-      <IconButton onPress={toggleModal} icon="menu" />
       <Modal
         isVisible={visibleModal || isOver}
         onPlay={toggleModal}
@@ -106,10 +102,9 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   screen: {
-    backgroundColor: WHITE,
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
 })
 

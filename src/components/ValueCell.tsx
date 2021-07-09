@@ -92,10 +92,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: CELL_DIMENSION,
     height: CELL_DIMENSION,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   cellText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    flex: 1,
     fontSize: 8 * vw,
   },
 })

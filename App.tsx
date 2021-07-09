@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import { Provider } from 'react-redux'
 import { loadAsync } from 'expo-font'
 import AppLoading from 'expo-app-loading'
-import GameView from '@components/GameView'
+import GameWrapper from '@components/GameWrapper'
 import store from '@/store'
 import { FREDOKA_FONT } from '@constants/initail'
 
@@ -27,7 +27,7 @@ const App: FC = () => {
 
   return (
     <Provider store={store}>
-      <GameView />
+      <GameWrapper />
     </Provider>
   )
 }
