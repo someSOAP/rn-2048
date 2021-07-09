@@ -6,7 +6,9 @@ import {
   BEST_SCORE_KEY,
   ENABLE_ANIM,
   FREDOKA_FONT,
+  GAME_OVER,
   GAME_SATE_KEY,
+  INITIAL_MODAL_TEXT,
 } from '@constants/initail'
 import {
   initGrid,
@@ -49,6 +51,7 @@ export const startNewGame = (): AppAction => (dispatch) => {
     dispatch(setVisibleModal(false))
     dispatch(updateGrid(initGrid()))
     dispatch(setIsOver(false))
+    dispatch(setModalText(INITIAL_MODAL_TEXT))
   })
 }
 
@@ -127,7 +130,7 @@ export const finnishMove =
 
     if (checkGameEnd(afterAnimValue)) {
       batch(() => {
-        dispatch(setModalText('GAME OVER'))
+        dispatch(setModalText(GAME_OVER))
         dispatch(setIsOver(true))
       })
       return void 0

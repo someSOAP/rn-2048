@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet, Modal as RNModal } from 'react-native'
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
-import { GRID_COLOR, MILKY, TEXT_BRIGHT, WHITE } from '@constants/colors'
+import { GRID_COLOR, MILKY, TEXT_BRIGHT } from '@constants/colors'
 import { CELL_DIMENSION } from '@constants/initail'
 import { IconButton } from './IconButton'
 import { CustomText } from './CustomText'
@@ -23,8 +23,6 @@ export const Modal: FC = () => {
 
   const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
   const restart = () => dispatch(startNewGame())
-
-  console.log(text)
 
   return (
     <RNModal

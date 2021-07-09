@@ -4,6 +4,7 @@ import { Cell } from './Cell'
 import { vw } from '@constants/window'
 import { GridType, ICell } from '@/types'
 import { GRID_COLOR } from '@constants/colors'
+import BackGroundCell from '@components/BackGroundCell'
 
 interface IGridProps {
   values: GridType
@@ -19,9 +20,28 @@ const generateRow = (values: ICell[], rowNum: number) => {
   )
 }
 
+const generateBackground = (dimension: number) => {
+  const mapArr = new Array(dimension).fill(1)
+  return (
+    <View style={styles.backGround}>
+      {mapArr.map((_, row) => {
+        console.log(`${row} row`)
+        return (
+          <View style={styles.row} key={row}>
+            {mapArr.map((_, cell) => {
+              return <BackGroundCell key={cell} />
+            })}
+          </View>
+        )
+      })}
+    </View>
+  )
+}
+
 export const Grid: FC<IGridProps> = ({ values }) => {
   return (
     <View style={styles.grid}>
+      {generateBackground(values.length)}
       {values.map((row, index) => {
         return generateRow(row, index)
       })}
@@ -39,6 +59,11 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+  },
+  backGround: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
   },
 })
 

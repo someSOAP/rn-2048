@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GridType, IGame } from '@/types'
+import { INITIAL_MODAL_TEXT } from '@constants/initail'
 
 const initialState: IGame = {
   isLoaded: false,
   visibleModal: false,
-  modalText: '2048',
+  modalText: INITIAL_MODAL_TEXT,
   grid: [],
   isOver: true,
   score: 0,
@@ -12,7 +13,7 @@ const initialState: IGame = {
 }
 
 export const gameSlice = createSlice({
-  name: 'gridSlice',
+  name: 'gameSlice',
   initialState,
   reducers: {
     setGameIsLoaded(state, { payload }: PayloadAction<boolean>) {

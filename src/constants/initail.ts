@@ -14,6 +14,10 @@ export const ANIMATION_TIMING = 250 //ms
 
 export const ENABLE_ANIM = true
 
+export const INITIAL_MODAL_TEXT = '2048'
+export const GAME_OVER = 'GAME OVER'
+export const VICTORY = 'VICTORY'
+
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
   velocityThreshold: 0.3,
   directionalOffsetThreshold: 80,
