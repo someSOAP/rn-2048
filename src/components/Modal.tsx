@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: GRID_COLOR,
     height: 80 * vw,
     width: 80 * vw,
+    padding: 5 * vw,
   },
 })
 

@@ -35,6 +35,7 @@ import {
   setIsOver,
   updateGrid,
   setVisibleModal,
+  setModalText,
   setGameState,
   setGameIsLoaded,
 } from './gameSlice'
@@ -125,7 +126,10 @@ export const finnishMove =
     const afterAnimValue = pushNewValue(getActualGrid(newValue))
 
     if (checkGameEnd(afterAnimValue)) {
-      dispatch(setIsOver(true))
+      batch(() => {
+        dispatch(setModalText('GAME OVER'))
+        dispatch(setIsOver(true))
+      })
       return void 0
     }
 

@@ -50,6 +50,7 @@ export const {
   setScore,
   setBestScore,
   setVisibleModal,
+  setModalText,
 } = gameSlice.actions
 
 export default gameSlice.reducer
