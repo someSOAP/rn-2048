@@ -22,6 +22,7 @@
     "android": {
       "package": "ru.somesoapgames.twentytwentyfour",
       "versionCode": 1,
+      "permissions":["READ_PHONE_STATE", "CAMERA", "READ_CONTACTS", "RECORD_AUDIO"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#edc22e"
