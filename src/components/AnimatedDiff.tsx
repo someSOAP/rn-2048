@@ -28,7 +28,7 @@ export const AnimatedDiff: FC<IAnimatedDiffProps> = ({ diff }) => {
   })
 
   useEffect(() => {
-    if (!diff) {
+    if (diff <= 0) {
       return void 0
     }
     Animated.timing(diffAnim, {
