@@ -14,6 +14,7 @@ export type ScoreCounterType = (score: number) => void
 export interface IGame {
   isLoaded: boolean
   isVictory: boolean
+  isMoving: boolean
   visibleModal: boolean
   modalText: string
   grid: GridType

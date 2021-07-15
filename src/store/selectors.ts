@@ -18,6 +18,11 @@ export const gameIsVictorySelector = createSelector(
   (game) => game.isVictory
 )
 
+export const gameIsMovingSelector = createSelector(
+  gameSelector,
+  (game) => game.isMoving
+)
+
 export const gameVisibleModalSelector = createSelector(
   gameSelector,
   (game) => game.visibleModal

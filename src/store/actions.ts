@@ -33,6 +33,7 @@ import {
   gameBestScoreSelector,
   gameGridSelector,
   gameIsVictorySelector,
+  gameIsMovingSelector,
 } from './selectors'
 import {
   setScore,
@@ -44,6 +45,7 @@ import {
   setGameState,
   setGameIsLoaded,
   setIsVictory,
+  setIsMoving,
 } from './gameSlice'
 import { loadAsync } from 'expo-font'
 
@@ -127,6 +129,7 @@ export const finishMove =
     batch(() => {
       dispatch(updateGrid(newValue))
       dispatch(updateScore(plusScore))
+      dispatch(setIsMoving(true))
     })
 
     const afterAnimValue = pushNewValue(getActualGrid(newValue))
@@ -146,10 +149,14 @@ export const finishMove =
           dispatch(setIsVictory(true))
           dispatch(setVisibleModal(true))
           dispatch(setModalText(VICTORY))
+          dispatch(setIsMoving(false))
         }
       }, ANIMATION_TIMING)
     } else {
-      dispatch(updateGrid(afterAnimValue))
+      batch(() => {
+        dispatch(updateGrid(afterAnimValue))
+        dispatch(setIsMoving(false))
+      })
     }
 
     AsyncStorage.setItem(GAME_SATE_KEY, JSON.stringify(gameSelector(state)))
@@ -157,10 +164,11 @@ export const finishMove =
 
 export const moveDown = (): AppAction => (dispatch, getState) => {
   const values = gameGridSelector(getState())
+  const isMoving = gameIsMovingSelector(getState())
 
   let columns = transposeGrid(values)
 
-  if (!canMoveReverse(columns)) {
+  if (isMoving || !canMoveReverse(columns)) {
     return void 0
   }
 
@@ -180,10 +188,11 @@ export const moveDown = (): AppAction => (dispatch, getState) => {
 
 export const moveUp = (): AppAction => (dispatch, getState) => {
   const values = gameGridSelector(getState())
+  const isMoving = gameIsMovingSelector(getState())
 
   let columns = transposeGrid(values)
 
-  if (!canMoveStraight(columns)) {
+  if (isMoving || !canMoveStraight(columns)) {
     return void 0
   }
 
@@ -202,8 +211,9 @@ export const moveUp = (): AppAction => (dispatch, getState) => {
 
 export const moveLeft = (): AppAction => (dispatch, getState) => {
   const values = gameGridSelector(getState())
+  const isMoving = gameIsMovingSelector(getState())
 
-  if (!canMoveStraight(values)) {
+  if (isMoving || !canMoveStraight(values)) {
     return void 0
   }
 
@@ -224,8 +234,9 @@ export const moveLeft = (): AppAction => (dispatch, getState) => {
 
 export const moveRight = (): AppAction => (dispatch, getState) => {
   const values = gameGridSelector(getState())
+  const isMoving = gameIsMovingSelector(getState())
 
-  if (!canMoveReverse(values)) {
+  if (isMoving || !canMoveReverse(values)) {
     return void 0
   }
 

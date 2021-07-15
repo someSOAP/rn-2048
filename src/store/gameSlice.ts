@@ -5,6 +5,7 @@ import { INITIAL_MODAL_TEXT } from '@constants/initail'
 const initialState: IGame = {
   isLoaded: false,
   isVictory: false,
+  isMoving: false,
   visibleModal: false,
   modalText: INITIAL_MODAL_TEXT,
   grid: [],
@@ -22,6 +23,9 @@ export const gameSlice = createSlice({
     },
     setIsVictory(state, { payload }: PayloadAction<boolean>) {
       state.isVictory = payload
+    },
+    setIsMoving(state, { payload }: PayloadAction<boolean>) {
+      state.isMoving = payload
     },
     setGameState(state, { payload }: PayloadAction<IGame>) {
       return payload
@@ -57,6 +61,7 @@ export const {
   setBestScore,
   setVisibleModal,
   setModalText,
+  setIsMoving,
 } = gameSlice.actions
 
 export default gameSlice.reducer
