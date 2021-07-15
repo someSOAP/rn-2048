@@ -142,22 +142,17 @@ export const finishMove =
       return void 0
     }
 
-    if (ENABLE_ANIM) {
-      setTimeout(() => {
+    setTimeout(() => {
+      batch(() => {
         dispatch(updateGrid(afterAnimValue))
+        dispatch(setIsMoving(false))
         if (!isVictory && checkWin(afterAnimValue)) {
           dispatch(setIsVictory(true))
           dispatch(setVisibleModal(true))
           dispatch(setModalText(VICTORY))
-          dispatch(setIsMoving(false))
         }
-      }, ANIMATION_TIMING)
-    } else {
-      batch(() => {
-        dispatch(updateGrid(afterAnimValue))
-        dispatch(setIsMoving(false))
       })
-    }
+    }, ANIMATION_TIMING)
 
     AsyncStorage.setItem(GAME_SATE_KEY, JSON.stringify(gameSelector(state)))
   }
