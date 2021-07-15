@@ -58,6 +58,7 @@ export const startNewGame = (): AppAction => (dispatch) => {
     dispatch(updateGrid(initGrid()))
     dispatch(setIsOver(false))
     dispatch(setIsVictory(false))
+    dispatch(setIsMoving(false))
     dispatch(setModalText(INITIAL_MODAL_TEXT))
   })
 }
@@ -134,14 +135,6 @@ export const finishMove =
 
     const afterAnimValue = pushNewValue(getActualGrid(newValue))
 
-    if (checkGameEnd(afterAnimValue)) {
-      batch(() => {
-        dispatch(setModalText(GAME_OVER))
-        dispatch(setIsOver(true))
-      })
-      return void 0
-    }
-
     setTimeout(() => {
       batch(() => {
         dispatch(updateGrid(afterAnimValue))
@@ -153,6 +146,15 @@ export const finishMove =
         }
       })
     }, ANIMATION_TIMING)
+
+    if (checkGameEnd(afterAnimValue)) {
+      batch(() => {
+        dispatch(setModalText(GAME_OVER))
+        dispatch(setIsOver(true))
+        dispatch(setIsMoving(false))
+      })
+      return void 0
+    }
 
     AsyncStorage.setItem(GAME_SATE_KEY, JSON.stringify(gameSelector(state)))
   }
