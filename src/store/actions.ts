@@ -51,7 +51,7 @@ import { loadAsync } from 'expo-font'
 
 type AppAction = ThunkAction<void, RootState, unknown, Action>
 
-export const startNewGame = (): AppAction => (dispatch) => {
+export const startNewGame = (): AppAction => (dispatch, getState) => {
   batch(() => {
     dispatch(setScore(0))
     dispatch(setVisibleModal(false))
@@ -61,6 +61,7 @@ export const startNewGame = (): AppAction => (dispatch) => {
     dispatch(setIsMoving(false))
     dispatch(setModalText(INITIAL_MODAL_TEXT))
   })
+  AsyncStorage.setItem(GAME_SATE_KEY, JSON.stringify(gameSelector(getState())))
 }
 
 export const loadGame = (): AppAction => async (dispatch) => {
