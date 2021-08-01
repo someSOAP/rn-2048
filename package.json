@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "build:andriod": "expo build:android -t apk"
+    "build:andriod": "expo build:android -t apk",
+    "build:andriod:apb": "expo build:android -t app-bundle"
   },
   "jest": {
     "preset": "react-native"
