@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { batch } from 'react-redux'
 import { ThunkAction, Action } from '@reduxjs/toolkit'
 import {
