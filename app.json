@@ -22,7 +22,11 @@
     "android": {
       "package": "ru.somesoapgames.twentytwentyfour",
       "versionCode": 4,
-      "permissions": ["WRITE_EXTERNAL_STORAGE", "READ_EXTERNAL_STORAGE", "READ_INTERNAL_STORAGE"],
+      "permissions": [
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "READ_INTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#edc22e"
@@ -38,6 +42,11 @@
           "username": "somesoap"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6f9f87dc-006d-4c15-b2b3-41b4d6365a2f"
+      }
+    }
   }
 }
