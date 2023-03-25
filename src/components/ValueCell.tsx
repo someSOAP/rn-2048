@@ -91,6 +91,9 @@ const ValueCell: FC<ICell> = (cell) => {
 
 const styles = StyleSheet.create({
   cell: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
     borderRadius: 8,
     width: CELL_DIMENSION,
     height: CELL_DIMENSION,
@@ -98,7 +101,6 @@ const styles = StyleSheet.create({
   cellText: {
     textAlign: 'center',
     textAlignVertical: 'center',
-    flex: 1,
     fontSize: 8 * vw,
   },
 })

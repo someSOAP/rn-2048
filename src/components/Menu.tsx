@@ -1,6 +1,12 @@
 import React, { FC } from 'react'
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TouchableWithoutFeedback,
+  GestureResponderEvent,
+} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet, Modal } from 'react-native'
 
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
@@ -24,32 +30,40 @@ export const Menu: FC = () => {
 
   const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
   const restart = () => dispatch(startNewGame())
+  const onEmptySpacePress = (ev: GestureResponderEvent) => {
+    if (ev.currentTarget === ev.target) {
+      toggleModal()
+    }
+  }
 
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visibleModal || isOver}
+      onRequestClose={toggleModal}
     >
-      <View style={styles.wrapper}>
-        <View style={styles.content}>
-          {text && <CustomText style={styles.modalText}>{text}</CustomText>}
-          <View style={styles.buttonsRow}>
-            {!isOver && (
+      <TouchableWithoutFeedback onPress={onEmptySpacePress}>
+        <View style={styles.wrapper}>
+          <View style={styles.content}>
+            {text && <CustomText style={styles.modalText}>{text}</CustomText>}
+            <View style={styles.buttonsRow}>
+              {!isOver && (
+                <IconButton
+                  onPress={toggleModal}
+                  style={styles.button}
+                  icon="play-outline"
+                />
+              )}
               <IconButton
-                onPress={toggleModal}
+                onPress={restart}
                 style={styles.button}
-                icon="play-outline"
+                icon="refresh-outline"
               />
-            )}
-            <IconButton
-              onPress={restart}
-              style={styles.button}
-              icon="refresh-outline"
-            />
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }
