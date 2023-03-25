@@ -28,9 +28,7 @@ const ValueCell: FC<ICell> = (cell) => {
 
   const { value, merged } = cell
 
-  const textStyle = Object.assign({}, mapTextColor(value), styles.cellText)
-
-  const style = Object.assign({}, styles.cell, mapBackgroundColor(value), {
+  const animatedStyle = {
     transform: [
       {
         scale: mergeAnim.interpolate({
@@ -51,7 +49,7 @@ const ValueCell: FC<ICell> = (cell) => {
         }),
       },
     ],
-  })
+  }
 
   const animateMerge = getAnimFunction(mergeAnim)
 
@@ -81,8 +79,12 @@ const ValueCell: FC<ICell> = (cell) => {
   }, [merged])
 
   return (
-    <Animated.View style={style}>
-      <CustomText style={textStyle}>{value || ''}</CustomText>
+    <Animated.View
+      style={[styles.cell, mapBackgroundColor(value), animatedStyle]}
+    >
+      <CustomText style={[styles.cellText, mapTextColor(value)]}>
+        {value || ''}
+      </CustomText>
     </Animated.View>
   )
 }

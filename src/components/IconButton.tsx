@@ -1,19 +1,14 @@
-import React, { FC, useRef } from 'react'
-import {
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  ViewStyle,
-} from 'react-native'
+import React, { FC, useRef, ComponentProps } from 'react'
+import { Animated, TouchableWithoutFeedback, ViewStyle } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { TEXT_DARK } from '@constants/colors'
 import { ANIMATION_TIMING, CELL_DIMENSION } from '@constants/initail'
 
 interface IIconButtonProps {
-  icon: string
-  onPress: () => void
+  icon: ComponentProps<typeof Ionicons>['name']
   color?: string
   style?: ViewStyle
+  onPress(): void
 }
 
 export const IconButton: FC<IIconButtonProps> = ({
@@ -24,7 +19,7 @@ export const IconButton: FC<IIconButtonProps> = ({
 }) => {
   const animPress = useRef(new Animated.Value(0)).current
 
-  const buttonStyle = Object.assign({}, styles.button, style, {
+  const buttonAnimatedStyle = {
     transform: [
       {
         scale: animPress.interpolate({
@@ -33,7 +28,7 @@ export const IconButton: FC<IIconButtonProps> = ({
         }),
       },
     ],
-  })
+  }
 
   const onPressIn = () => {
     Animated.timing(animPress, {
@@ -50,9 +45,9 @@ export const IconButton: FC<IIconButtonProps> = ({
 
   return (
     <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
-      <Animated.View style={buttonStyle}>
+      <Animated.View style={[style, buttonAnimatedStyle]}>
         <Ionicons
-          name={icon as any}
+          name={icon}
           color={color ?? TEXT_DARK}
           size={CELL_DIMENSION}
         />
@@ -60,9 +55,5 @@ export const IconButton: FC<IIconButtonProps> = ({
     </TouchableWithoutFeedback>
   )
 }
-
-const styles = StyleSheet.create({
-  button: {},
-})
 
 export default IconButton

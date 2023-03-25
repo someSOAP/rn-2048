@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet, Modal as RNModal } from 'react-native'
+import { View, StyleSheet, Modal } from 'react-native'
+
 import mixins from '@utils/mixins'
 import { vw } from '@constants/window'
 import { GRID_COLOR, MILKY, TEXT_BRIGHT } from '@constants/colors'
@@ -15,7 +16,7 @@ import {
 } from '@/store'
 import { startNewGame } from '@/store/actions'
 
-export const Modal: FC = () => {
+export const Menu: FC = () => {
   const dispatch = useDispatch()
   const visibleModal = useSelector(gameVisibleModalSelector)
   const isOver = useSelector(gameIsOverSelector)
@@ -25,7 +26,7 @@ export const Modal: FC = () => {
   const restart = () => dispatch(startNewGame())
 
   return (
-    <RNModal
+    <Modal
       animationType="fade"
       transparent={true}
       visible={visibleModal || isOver}
@@ -49,7 +50,7 @@ export const Modal: FC = () => {
           </View>
         </View>
       </View>
-    </RNModal>
+    </Modal>
   )
 }
 
@@ -89,4 +90,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Modal
+export default Menu

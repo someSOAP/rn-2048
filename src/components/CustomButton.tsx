@@ -20,10 +20,8 @@ const CustomButton: FC<ICustomButtonProps> = ({
   textColor = 'white',
   style,
 }) => {
-  const touchableStyle = Object.assign({}, styles.btn, style)
-
   return (
-    <TouchableOpacity style={touchableStyle} onPress={onPress}>
+    <TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
       <Text style={{ ...styles.btnText, color: textColor }}>{children}</Text>
     </TouchableOpacity>
   )

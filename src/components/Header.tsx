@@ -20,7 +20,6 @@ export const Header: FC = () => {
 
 const styles = StyleSheet.create({
   header: {
-    position: 'absolute',
     width: '100%',
     paddingTop: StatusBar.currentHeight,
     flexDirection: 'row',

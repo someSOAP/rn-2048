@@ -4,10 +4,8 @@ import { FREDOKA_FONT } from '@constants/initail'
 import { TEXT_DARK } from '@constants/colors'
 
 export const CustomText: FC<TextProps> = ({ children, style, ...props }) => {
-  const textStyle = Object.assign({}, styles.text, style)
-
   return (
-    <Text {...props} style={textStyle}>
+    <Text {...props} style={[styles.text, style]}>
       {children}
     </Text>
   )

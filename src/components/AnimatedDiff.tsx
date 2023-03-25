@@ -7,12 +7,12 @@ interface IAnimatedDiffProps {
   diff: number
 }
 
-export const AnimatedDiff: FC<IAnimatedDiffProps> = ({ diff }) => {
+const AnimatedDiffBase: FC<IAnimatedDiffProps> = ({ diff }) => {
   const diffAnim = useRef(new Animated.Value(0)).current
 
   const resetAnim = () => diffAnim.setValue(0)
 
-  const animatedStyle = Object.assign({}, styles.diff, {
+  const animatedStyle = {
     opacity: diffAnim.interpolate({
       inputRange: [0, 100],
       outputRange: [0, 1],
@@ -25,7 +25,7 @@ export const AnimatedDiff: FC<IAnimatedDiffProps> = ({ diff }) => {
         }),
       },
     ],
-  })
+  }
 
   useEffect(() => {
     if (diff <= 0) {
@@ -39,7 +39,7 @@ export const AnimatedDiff: FC<IAnimatedDiffProps> = ({ diff }) => {
   }, [diff])
 
   return (
-    <Animated.View style={animatedStyle}>
+    <Animated.View style={[animatedStyle, styles.diff]}>
       <CustomText style={styles.text}>+{String(diff)}</CustomText>
     </Animated.View>
   )
@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
   },
 })
 
-export default memo(AnimatedDiff, (prevState, nextState) => {
+export const AnimatedDiff = memo(AnimatedDiffBase, (prevState, nextState) => {
   return nextState.diff === 0
 })
+
+export default AnimatedDiff
