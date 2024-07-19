@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "ru.somesoapgames.twentytwentyfour",
-      "versionCode": 5,
+      "versionCode": 7,
       "permissions": [
         "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE",
