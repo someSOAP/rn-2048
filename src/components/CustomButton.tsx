@@ -1,42 +1,42 @@
 import React, { FC } from 'react'
 import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  StyleProp,
-  ViewStyle,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	StyleProp,
+	ViewStyle,
 } from 'react-native'
 
 interface ICustomButtonProps {
-  onPress: () => void
-  children: string
-  textColor?: string
-  style?: StyleProp<ViewStyle>
+	onPress: () => void
+	children: string
+	textColor?: string
+	style?: StyleProp<ViewStyle>
 }
 
 const CustomButton: FC<ICustomButtonProps> = ({
-  onPress,
-  children,
-  textColor = 'white',
-  style,
+	onPress,
+	children,
+	textColor = 'white',
+	style,
 }) => {
-  return (
-    <TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
-      <Text style={{ ...styles.btnText, color: textColor }}>{children}</Text>
-    </TouchableOpacity>
-  )
+	return (
+		<TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
+			<Text style={{ ...styles.btnText, color: textColor }}>{children}</Text>
+		</TouchableOpacity>
+	)
 }
 
 const styles = StyleSheet.create({
-  btn: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#0770bc',
-  },
-  btnText: {
-    color: 'white',
-  },
+	btn: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		padding: 20,
+		backgroundColor: '#0770bc',
+	},
+	btnText: {
+		color: 'white',
+	},
 })
 
 export default CustomButton

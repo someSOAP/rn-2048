@@ -17,15 +17,15 @@ export const GRID_COLOR = 'rgb(187, 173, 160)'
 export const CELL_COLOR = 'rgb(205, 193, 180)'
 
 export const COLORS_MAP = new Map<number, string>([
-  [2, WHITE],
-  [4, MILKY],
-  [8, LIGHT_ORANGE],
-  [16, ORANGE],
-  [32, DEEP_ORANGE],
-  [64, RED],
-  [128, LIGHT_YELLOW],
-  [256, YELLOW],
-  [512, SUNNY_YELLOW],
-  [1024, DEEP_YELLOW],
-  [2048, FINAL],
+	[2, WHITE],
+	[4, MILKY],
+	[8, LIGHT_ORANGE],
+	[16, ORANGE],
+	[32, DEEP_ORANGE],
+	[64, RED],
+	[128, LIGHT_YELLOW],
+	[256, YELLOW],
+	[512, SUNNY_YELLOW],
+	[1024, DEEP_YELLOW],
+	[2048, FINAL],
 ])

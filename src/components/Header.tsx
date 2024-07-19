@@ -1,31 +1,33 @@
 import React, { FC } from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { IconButton } from '@components/IconButton'
+
 import { gameVisibleModalSelector, setVisibleModal } from '@/store'
 
 export const Header: FC = () => {
-  const dispatch = useDispatch()
+	const dispatch = useDispatch()
 
-  const visibleModal = useSelector(gameVisibleModalSelector)
+	const visibleModal = useSelector(gameVisibleModalSelector)
 
-  const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
+	const toggleModal = () => dispatch(setVisibleModal(!visibleModal))
 
-  return (
-    <View style={styles.header}>
-      <IconButton onPress={toggleModal} icon="menu" />
-    </View>
-  )
+	return (
+		<View style={styles.header}>
+			<IconButton onPress={toggleModal} icon="menu" />
+		</View>
+	)
 }
 
 const styles = StyleSheet.create({
-  header: {
-    width: '100%',
-    paddingTop: StatusBar.currentHeight,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignSelf: 'stretch',
-  },
+	header: {
+		width: '100%',
+		paddingTop: StatusBar.currentHeight,
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignSelf: 'stretch',
+	},
 })
 
 export default Header

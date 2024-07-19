@@ -42,7 +42,8 @@
         {
           "username": "somesoap"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {

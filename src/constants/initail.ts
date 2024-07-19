@@ -1,9 +1,9 @@
 import { vw } from '@constants/window'
 
 interface GestureRecognizerConfig {
-  velocityThreshold?: number
-  directionalOffsetThreshold?: number
-  gestureIsClickThreshold?: number
+	velocityThreshold?: number
+	directionalOffsetThreshold?: number
+	gestureIsClickThreshold?: number
 }
 
 export const GRID_LENGTH = 4
@@ -19,9 +19,9 @@ export const GAME_OVER = 'GAME OVER'
 export const VICTORY = 'VICTORY'
 
 export const GESTURE_CONFIGS: GestureRecognizerConfig = {
-  velocityThreshold: 0.3,
-  directionalOffsetThreshold: 80,
-  gestureIsClickThreshold: 5,
+	velocityThreshold: 0.3,
+	directionalOffsetThreshold: 80,
+	gestureIsClickThreshold: 5,
 }
 
 export const FREDOKA_FONT = 'FREDOKA_FONT'
